@@ -60,7 +60,7 @@ function(my_add_compile_options _target)
 
       target_compile_options(${_target} PRIVATE "/D_MBCS")
    else()
-      target_compile_options(${_target} PRIVATE "-std=c++11")
+      target_compile_options(${_target} PRIVATE "-std=c++17")
       target_compile_options(${_target} PRIVATE "-fexceptions")
       target_compile_options(${_target} PRIVATE "-O3")
       target_compile_options(${_target} PRIVATE "-fthreadsafe-statics")

@@ -8,14 +8,14 @@
 #include "risPortableCalls.h"
 #include "risSerialSettings.h"
 
-#define  _SOMESERIALPARMS_CPP_
-#include "someSerialParms.h"
+#define  _PROCOSERIALPARMS_CPP_
+#include "procoSerialParms.h"
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 
-namespace Some
+namespace ProtoComm
 {
 
 //******************************************************************************
@@ -33,11 +33,11 @@ void SerialParms::reset()
    BaseClass::reset();
    if (Ris::portableIsWindows())
    {
-      BaseClass::setFilePath("c:/aaa_prime/varcom/files/Serial_Parms.txt");
+      BaseClass::setFilePath("c:/aaa_prime/files/Serial_Parms.txt");
    }
    else
    {
-      BaseClass::setFilePath("/opt/prime/files/Serial_Parms.txt");
+      BaseClass::setFilePath_RelativeToBaseDir("files/Serial_Parms.txt");
    }
 
    mSerialPortDevice[0] = 0;
@@ -45,12 +45,7 @@ void SerialParms::reset()
    mSerialRxTimeout = 0;
    mTxTermMode = 0;
    mRxTermMode = 0;
-   mCheckSumFlag = true;
    mThreadTimerPeriod = 0;
-   mNumWords = 0;
-   mReadAllFlag = false;
-   mWriteAllFlag = false;
-   mRxReqNumBytes = 16;
 }
 
 //******************************************************************************
@@ -70,16 +65,9 @@ void SerialParms::show()
    printf("\n");
    printf("TxTermMode              %-12s\n", Ris::string_from_int_SerialSettingsTermMode(mTxTermMode));
    printf("RxTermMode              %-12s\n", Ris::string_from_int_SerialSettingsTermMode(mRxTermMode));
-   printf("CheckSumFlag            %-12s\n", my_string_from_bool(mCheckSumFlag));
 
    printf("\n");
    printf("ThreadTimerPeriod       %-12d\n", mThreadTimerPeriod);
-   printf("NumWords                %-12d\n", mNumWords);
-   printf("NumWords                %-12d\n", mNumWords);
-   printf("\n");
-   printf("ReadAllFlag             %-12s\n", my_string_from_bool(mReadAllFlag));
-   printf("WriteAllFlag            %-12s\n", my_string_from_bool(mWriteAllFlag));
-   printf("RxReqNumBytes           %-12d\n", mRxReqNumBytes);
 
    printf("SerialParms************************************************\n");
    printf("\n");
@@ -99,16 +87,9 @@ void SerialParms::execute(Ris::CmdLineCmd* aCmd)
    if (aCmd->isCmd("SerialPortDevice"))  aCmd->copyArgString(1, mSerialPortDevice, cMaxStringSize);
    if (aCmd->isCmd("SerialPortSetup"))   aCmd->copyArgString(1, mSerialPortSetup, cMaxStringSize);
    if (aCmd->isCmd("SerialRxTimeout"))   mSerialRxTimeout = aCmd->argInt(1);
-
    if (aCmd->isCmd("TxTermMode"))        mTxTermMode = Ris::int_from_string_SerialSettingsTermMode(aCmd->argString(1));
    if (aCmd->isCmd("RxTermMode"))        mRxTermMode = Ris::int_from_string_SerialSettingsTermMode(aCmd->argString(1));
-   if (aCmd->isCmd("CheckSumFlag"))      mCheckSumFlag = aCmd->argBool(1);
-
    if (aCmd->isCmd("ThreadTimerPeriod")) mThreadTimerPeriod = aCmd->argInt(1);
-   if (aCmd->isCmd("NumWords"))          mNumWords = aCmd->argInt(1);
-   if (aCmd->isCmd("ReadAllFlag"))       mReadAllFlag = aCmd->argBool(1);
-   if (aCmd->isCmd("WriteAllFlag"))      mWriteAllFlag = aCmd->argBool(1);
-   if (aCmd->isCmd("RxReqNumBytes"))     mRxReqNumBytes = aCmd->argInt(1);
 }
 
 //******************************************************************************

@@ -1,11 +1,13 @@
+
 #include "stdafx.h"
 
 #include "risThreadsProcess.h"
-#include "MainInit.h"
 #include "risCmdLineConsole.h"
 #include "CmdLineExec.h"
+#include "MainInit.h"
 
-#include "someVarcomSRThread.h"
+#include "procoProcThread.h"
+#include "procoMonitorThread.h"
 
 //******************************************************************************
 //******************************************************************************
@@ -18,15 +20,18 @@ int main(int argc,char** argv)
    //***************************************************************************
    // Begin program.
 
-   main_initialize(argc, argv);
+   main_initialize(argc,argv);
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
    // Launch program threads.
 
-   Some::gVarcomSRThread = new Some::VarcomSRThread;
-   Some::gVarcomSRThread->launchThread();
+   ProtoComm::gProcThread = new ProtoComm::ProcThread;
+   ProtoComm::gProcThread->launchThread();
+
+   ProtoComm::gMonitorThread = new ProtoComm::MonitorThread;
+   ProtoComm::gMonitorThread->launchThread();
 
    //***************************************************************************
    //***************************************************************************
@@ -34,7 +39,8 @@ int main(int argc,char** argv)
    // Show program threads.
 
    Ris::Threads::showCurrentThreadInfo();
-   if (Some::gVarcomSRThread)    Some::gVarcomSRThread->showThreadInfo();
+   ProtoComm::gProcThread->showThreadInfo();
+   ProtoComm::gMonitorThread->showThreadInfo();
 
    //***************************************************************************
    //***************************************************************************
@@ -50,18 +56,13 @@ int main(int argc,char** argv)
    //***************************************************************************
    // Shutdown program threads.
 
-   if (Some::gVarcomSRThread)     Some::gVarcomSRThread->shutdownThread();
+   ProtoComm::gMonitorThread->shutdownThread();
+   delete ProtoComm::gMonitorThread;
+   ProtoComm::gMonitorThread = 0;
 
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Delete program threads.
-
-   if (Some::gVarcomSRThread)
-   {
-      delete Some::gVarcomSRThread;
-      Some::gVarcomSRThread = 0;
-   }
+   ProtoComm::gProcThread->shutdownThread();
+   delete ProtoComm::gProcThread;
+   ProtoComm::gProcThread = 0;
 
    //***************************************************************************
    //***************************************************************************

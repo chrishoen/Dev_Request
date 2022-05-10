@@ -1,8 +1,16 @@
+
 #include "stdafx.h"
 
-#include "someSerialParms.h"
-#include "someVarcomSRThread.h"
+#include "procoSerialParms.h"
+#include "procoMsg.h"
+#include "procoMsgHelper.h"
+
+#include "procoProcThread.h"
+#include "procoMonitorThread.h"
+
 #include "CmdLineExec.h"
+
+using namespace ProtoComm;
 
 //******************************************************************************
 //******************************************************************************
@@ -11,7 +19,6 @@
 CmdLineExec::CmdLineExec()
 {
 }
-
 void CmdLineExec::reset()
 {
 }
@@ -19,103 +26,56 @@ void CmdLineExec::reset()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// This class is the program command line executive. It processes user
-// command line inputs and executes them. It inherits from the command line
-// command executive base class, which provides an interface for executing
-// command line commands. It provides an override execute function that is
-// called by a console executive when it receives a console command line input.
-// The execute function then executes the command.
 
 void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 {
-   if (aCmd->isCmd("REQ"))      Some::gVarcomSRThread->mRxReqNumBytes = aCmd->argInt(1);
-   if (aCmd->isCmd("SEND"))     executeSend(aCmd);
-   if (aCmd->isCmd("ABORT"))    executeAbort(aCmd);
-   if (aCmd->isCmd("START"))    executeStart(aCmd);
-   if (aCmd->isCmd("HM"))       executeHome(aCmd);
-   if (aCmd->isCmd("UP"))       executeUp(aCmd);
-   if (aCmd->isCmd("DN"))       executeDown(aCmd);
-   if (aCmd->isCmd("SP"))       executeStopped(aCmd);
-
-   if (aCmd->isCmd("GO1"))      executeGo1(aCmd);
-   if (aCmd->isCmd("GO2"))      executeGo2(aCmd);
-   if (aCmd->isCmd("GO3"))      executeGo3(aCmd);
-   if (aCmd->isCmd("GO4"))      executeGo4(aCmd);
-   if (aCmd->isCmd("GO5"))      executeGo5(aCmd);
-   if (aCmd->isCmd("PARMS"))    executeParms(aCmd);
+   if (aCmd->isCmd("TP"))        ProtoComm::gProcThread->mTPCode = aCmd->argInt(1);
+   if (aCmd->isCmd("SEND"))      executeSend(aCmd);
+   if (aCmd->isCmd("ECHO"))      executeEcho(aCmd);
+   if (aCmd->isCmd("DATA"))      executeData(aCmd);
+   if (aCmd->isCmd("ABORT"))     executeAbort(aCmd);
+   if (aCmd->isCmd("GO1"))       executeGo1(aCmd);
+   if (aCmd->isCmd("GO2"))       executeGo2(aCmd);
+   if (aCmd->isCmd("GO3"))       executeGo3(aCmd);
+   if (aCmd->isCmd("GO4"))       executeGo4(aCmd);
+   if (aCmd->isCmd("Parms"))     executeParms(aCmd);
 }
 
-
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 
-void CmdLineExec::executeSend(Ris::CmdLineCmd* aCmd)
+void CmdLineExec::special(int aSpecial)
 {
-   char tString[100];
-   if (aCmd->numArg() == 0)
+   ProtoComm::gProcThread->mShowCode = aSpecial;
+   ProtoComm::gMonitorThread->mShowCode = aSpecial;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void CmdLineExec::executeSend (Ris::CmdLineCmd* aCmd)
+{
+   aCmd->setArgDefault(1,1);
+   int tMsgType= aCmd->argInt(1);
+
+   switch (tMsgType)
    {
-      strcpy(tString, "ADDR");
-   }
-   else
-   {
-      sprintf(tString, "%s", aCmd->argWhole());
-   }
-   Some::gVarcomSRThread->sendString(tString);
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-void CmdLineExec::executeAbort(Ris::CmdLineCmd* aCmd)
-{
-   Some::gVarcomSRThread->abort();
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-void CmdLineExec::executeStart(Ris::CmdLineCmd* aCmd)
-{
-   int tTimeout = 200;
-   Some::gVarcomSRThread->sendString("\\3");
-   Ris::Threads::threadSleep(tTimeout);
-   Some::gVarcomSRThread->sendString("en");
-   Ris::Threads::threadSleep(tTimeout);
-   Some::gVarcomSRThread->sendString("echo 1");
-   Ris::Threads::threadSleep(tTimeout);
-   Some::gVarcomSRThread->sendString("homecmd");
-   Ris::Threads::threadSleep(tTimeout);
-   Some::gVarcomSRThread->sendString("ready");
-   Ris::Threads::threadSleep(tTimeout);
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-void CmdLineExec::executeHome(Ris::CmdLineCmd* aCmd)
-{
-   Some::gVarcomSRThread->sendString("homecmd");
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-void CmdLineExec::executeUp(Ris::CmdLineCmd* aCmd)
-{
-   int tTimeout = 200;
-   int tCount = 4;
-
-   Some::gVarcomSRThread->sendString("moveinc 50000 20");
-
-   for (int i = 0; i < tCount; i++)
-   {
-      Ris::Threads::threadSleep(tTimeout);
-      Some::gVarcomSRThread->sendString("stopped");
+      case 1:
+      {
+         ProtoComm::TestMsg* tMsg = new ProtoComm::TestMsg;
+         MsgHelper::initialize(tMsg);
+         gProcThread->sendMsg(tMsg);
+         break;
+      }
+      case 5:
+      {
+         ProtoComm::DataMsg* tMsg = new ProtoComm::DataMsg;
+         MsgHelper::initialize(tMsg);
+         gProcThread->sendMsg(tMsg);
+         break;
+      }
    }
 }
 
@@ -123,35 +83,57 @@ void CmdLineExec::executeUp(Ris::CmdLineCmd* aCmd)
 //******************************************************************************
 //******************************************************************************
 
-void CmdLineExec::executeDown(Ris::CmdLineCmd* aCmd)
+void CmdLineExec::executeEcho(Ris::CmdLineCmd* aCmd)
 {
-   int tTimeout = 200;
-   int tCount = 4;
-
-   Some::gVarcomSRThread->sendString("moveinc -50000 20");
-
-   for (int i = 0; i < tCount; i++)
-   {
-      Ris::Threads::threadSleep(tTimeout);
-      Some::gVarcomSRThread->sendString("stopped");
-   }
+   aCmd->setArgDefault(1, 0);
+   int tNumWords = aCmd->argInt(1);
+   
+   ProtoComm::EchoRequestMsg* tMsg = new ProtoComm::EchoRequestMsg;
+   MsgHelper::initialize(tMsg,tNumWords);
+   gProcThread->sendMsg(tMsg);
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 
-void CmdLineExec::executeStopped(Ris::CmdLineCmd* aCmd)
+void CmdLineExec::executeData(Ris::CmdLineCmd* aCmd)
 {
-   Some::gVarcomSRThread->sendString("stopped");
+   ProtoComm::DataMsg* tMsg = new ProtoComm::DataMsg;
+   MsgHelper::initialize(tMsg);
+
+   gProcThread->sendMsg(tMsg);
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+
+void CmdLineExec::executeAbort (Ris::CmdLineCmd* aCmd)
+{
+   gProcThread->mAbortQCall();
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void test1(Ris::ByteContent* aMsg)
+{
+   ProtoComm::BaseMsg* tMsg = (ProtoComm::BaseMsg*)aMsg;
+   Prn::print(0, "MessageType %d", tMsg->mMessageType);
+}
+
+void test2(Ris::ByteContent* aMsg)
+{
+   test1(aMsg);
+}
 
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
+   ProtoComm::TestMsg* tMsg = new ProtoComm::TestMsg;
+   test1(tMsg);
+   test2(tMsg);
 }
 
 //******************************************************************************
@@ -160,6 +142,9 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
+   ProtoComm::MsgMetrics tMsgMetrics;
+   ProtoComm::TestMsg* tMsg = new ProtoComm::TestMsg;
+   tMsgMetrics.update(tMsg, 100);
 }
 
 //******************************************************************************
@@ -182,19 +167,9 @@ void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
 //******************************************************************************
 //******************************************************************************
 
-void CmdLineExec::executeGo5(Ris::CmdLineCmd* aCmd)
-{
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
 void CmdLineExec::executeParms(Ris::CmdLineCmd* aCmd)
 {
-   Some::gSerialParms.reset();
-   Some::gSerialParms.readSection("default");
-   Some::gSerialParms.show();
+   ProtoComm::gSerialParms.show();
 }
 
 //******************************************************************************

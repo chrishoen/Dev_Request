@@ -15,7 +15,7 @@ Parameters class whose values are read from a command file.
 //******************************************************************************
 //******************************************************************************
 
-namespace Some
+namespace ProtoComm
 {
 
 //******************************************************************************
@@ -56,14 +56,14 @@ public:
    //***************************************************************************
    // Constants.
 
-   static const int cMaxStringSize = 64;
+   static const int cMaxStringSize = 30;
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Members. Read from the parameters file.
+   // Members. Read from paramaters file.
 
-   // Serial port setup.
+   // Serial setup and port.
    char mSerialPortDevice[cMaxStringSize];
    char mSerialPortSetup[cMaxStringSize];
    int  mSerialRxTimeout;
@@ -72,24 +72,8 @@ public:
    int mTxTermMode;
    int mRxTermMode;
 
-   // If true then use checksums.
-   bool mCheckSumFlag;
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Members. Read from the parameters file.
-
    // Message thread timer period.
    int mThreadTimerPeriod;
-
-   // Echo message number of words.
-   int mNumWords;
-
-   // Transfer mode variables.
-   bool mReadAllFlag;
-   bool mWriteAllFlag;
-   int mRxReqNumBytes;
 
    //***************************************************************************
    //***************************************************************************
@@ -122,7 +106,7 @@ public:
 //******************************************************************************
 // Global instance.
 
-#ifdef _SOMESERIALPARMS_CPP_
+#ifdef _PROCOSERIALPARMS_CPP_
    SerialParms gSerialParms;
 #else
    extern SerialParms gSerialParms;

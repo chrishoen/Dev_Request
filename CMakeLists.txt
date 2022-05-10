@@ -11,13 +11,10 @@ project ("Dev_Request")
 my_special1() 
 
 add_subdirectory ("CommonLib")
-add_subdirectory ("requester")
+add_subdirectory ("Requester")
 return()
 
 add_subdirectory ("Test")
 return()
-
-
-
 
 

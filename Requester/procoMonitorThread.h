@@ -1,36 +1,49 @@
 #pragma once
 
 /*==============================================================================
-Varcom serial string port sender receiver.
-==========================================================================*/
+Program monitor timer thread.
+==============================================================================*/
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 
-#include "risSerialStringSR.h"
+#include "risThreadsTimerThread.h"
+#include "risMonitor.h"
 
-namespace Some
+namespace ProtoComm
 {
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// This is a timer thread that monitors program status and prints it.
 
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Varcom serial string sender receiver.
-//
-// This class contains a serial string port. It provides a capability to
-// send a request string and then receive a fixed number of response strings. 
-
-class VarcomSR : public Ris::SerialStringSR
+class MonitorThread : public Ris::Threads::BaseTimerThread
 {
-private:
-   typedef Ris::SerialStringSR BaseClass;
 public:
+   typedef Ris::Threads::BaseTimerThread BaseClass;
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
    // Members.
+
+   // If true then process status.
+   bool mTPFlag;
+
+   // Select show mode.
+   int mShowCode;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Members. Monitor variables.
+
+   // Message counts.
+   Ris::Monitor<int> mMon_TxMsgCount;
+   Ris::Monitor<long long> mMon_TxByteCount;
+   Ris::Monitor<int> mMon_RxMsgCount;
+   Ris::Monitor<long long> mMon_RxByteCount;
 
    //***************************************************************************
    //***************************************************************************
@@ -38,21 +51,35 @@ public:
    // Methods.
 
    // Constructor.
-   VarcomSR();
-   ~VarcomSR();
-   void initialize(Ris::SerialSettings& aSettings)override;
+   MonitorThread();
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Methods.
+   // Methods. Thread base class overloads.
 
-   // Perform the initial sequence. 
-   void doSRFirst();
+   // Update status variables.
+   void update();
+
+   // Execute periodically. This is called by the base class timer. It 
+   // updates monitor variables and shows them as program status.
+   void executeOnTimer(int aTimeCount) override;
 };
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Global instance.
+
+#ifdef _PROCOMONITORTHREAD_CPP_
+           MonitorThread* gMonitorThread;
+#else
+   extern  MonitorThread* gMonitorThread;
+#endif
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 }//namespace
+
 
