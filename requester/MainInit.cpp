@@ -11,7 +11,7 @@
 
 void main_initialize(int argc,char** argv)
 {
-   printf("varcom Program*******************************************BEGIN\n");
+   printf("requester Program*******************************************BEGIN\n");
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
@@ -63,14 +63,13 @@ void main_initialize(int argc,char** argv)
 
 void main_finalize()
 {
-   Prn::print(Prn::Show1, "varcom Program******************************************END");
-   printf("\n");
-
    // Finalize print facility.
    Prn::finalizePrint();
 
    // Exit process.
    Ris::Threads::exitProcess();
+
+   printf("requester Program*******************************************END\n");
 }
 
 //******************************************************************************

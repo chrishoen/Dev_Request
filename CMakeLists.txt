@@ -11,7 +11,7 @@ project ("Dev_Request")
 my_special1() 
 
 add_subdirectory ("CommonLib")
-add_subdirectory ("varcom")
+add_subdirectory ("requester")
 return()
 
 add_subdirectory ("Test")

@@ -1,5 +1,5 @@
 ﻿cmake_minimum_required(VERSION 3.10)
-set (project "varcom")
+set (project "requester")
 project(${project} CXX)
 my_find_src_files (src_files ${project})
 add_executable (${project} ${src_files})
