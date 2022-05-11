@@ -17,7 +17,7 @@ Serial message prototype thread class.
 //******************************************************************************
 //******************************************************************************
 
-namespace ProtoComm
+namespace Some
 {
 
 //******************************************************************************
@@ -49,7 +49,7 @@ namespace ProtoComm
 // messages.
 //
 
-class  ProcThread : public Ris::Threads::BaseQCallThread
+class  RequesterThread : public Ris::Threads::BaseQCallThread
 {
 public:
    typedef Ris::Threads::BaseQCallThread BaseClass;
@@ -64,7 +64,7 @@ public:
    Ris::SerialMsgThread*  mSerialMsgThread;
 
    // Message monkey used by mSerialMsgThread.
-   MsgMonkey* mMsgMonkey;
+   ProtoComm::MsgMonkey* mMsgMonkey;
 
    //***************************************************************************
    //***************************************************************************
@@ -86,8 +86,8 @@ public:
    // Methods.
 
    // Constructor.
-   ProcThread();
-  ~ProcThread();
+   RequesterThread();
+  ~RequesterThread();
 
    //***************************************************************************
    //***************************************************************************
@@ -166,7 +166,7 @@ public:
    // Methods.
 
    // Send a message via mSerialMsgThread:
-   void sendMsg (BaseMsg* aTxMsg);
+   void sendMsg (ProtoComm::BaseMsg* aTxMsg);
    void sendTestMsg();
 };
 
@@ -175,10 +175,10 @@ public:
 //******************************************************************************
 // Global singular instance.
 
-#ifdef _PROCOSERIALTHREAD_CPP_
-         ProcThread* gProcThread;
+#ifdef _SOMEREQUESTERTHREAD_CPP_
+         RequesterThread* gRequesterThread;
 #else
-extern   ProcThread* gProcThread;
+extern   RequesterThread* gRequesterThread;
 #endif
 
 //******************************************************************************

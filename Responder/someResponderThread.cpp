@@ -9,7 +9,7 @@
 #include "procoMsgHelper.h"
 #include "someSerialParms.h"
 
-#define  _SOMESERIALTHREAD_CPP_
+#define  _SOMERESPONDERTHREAD_CPP_
 #include "someResponderThread.h"
 
 namespace Some

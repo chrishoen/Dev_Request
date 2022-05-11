@@ -1,4 +1,9 @@
 ﻿cmake_minimum_required(VERSION 3.10)
+
+if (NOT MSVC)
+   return()
+endif()
+
 set (project "Requester")
 project(${project} CXX)
 my_find_src_files (src_files ${project})

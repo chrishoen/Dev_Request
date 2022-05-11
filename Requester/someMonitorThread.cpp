@@ -7,12 +7,12 @@ Description:
 //******************************************************************************
 #include "stdafx.h"
 
-#include "procoProcThread.h"
+#include "someRequesterThread.h"
 
-#define  _PROCOMONITORTHREAD_CPP_
-#include "procoMonitorThread.h"
+#define  _SOMEMONITORTHREAD_CPP_
+#include "someMonitorThread.h"
 
-namespace ProtoComm
+namespace Some
 {
 
 //******************************************************************************
@@ -32,8 +32,8 @@ MonitorThread::MonitorThread()
    mShowCode = 0;
 
    // Bind member variables.
-   ProtoComm::MsgMetrics* tTxMsgMetrics = (ProtoComm::MsgMetrics*)gProcThread->mMsgMonkey->mTxMsgMetrics;
-   ProtoComm::MsgMetrics* tRxMsgMetrics = (ProtoComm::MsgMetrics*)gProcThread->mMsgMonkey->mRxMsgMetrics;
+   ProtoComm::MsgMetrics* tTxMsgMetrics = (ProtoComm::MsgMetrics*)gRequesterThread->mMsgMonkey->mTxMsgMetrics;
+   ProtoComm::MsgMetrics* tRxMsgMetrics = (ProtoComm::MsgMetrics*)gRequesterThread->mMsgMonkey->mRxMsgMetrics;
 
    mMon_TxMsgCount.bind(&tTxMsgMetrics->mMsgCount);
    mMon_TxByteCount.bind(&tTxMsgMetrics->mByteCount);
@@ -63,8 +63,8 @@ void MonitorThread::executeOnTimer(int aTimeCount)
    // Show.
    if (mShowCode == 1)
    {
-      ProtoComm::MsgMetrics* tTxMsgMetrics = (ProtoComm::MsgMetrics*)gProcThread->mMsgMonkey->mTxMsgMetrics;
-      ProtoComm::MsgMetrics* tRxMsgMetrics = (ProtoComm::MsgMetrics*)gProcThread->mMsgMonkey->mRxMsgMetrics;
+      ProtoComm::MsgMetrics* tTxMsgMetrics = (ProtoComm::MsgMetrics*)gRequesterThread->mMsgMonkey->mTxMsgMetrics;
+      ProtoComm::MsgMetrics* tRxMsgMetrics = (ProtoComm::MsgMetrics*)gRequesterThread->mMsgMonkey->mRxMsgMetrics;
 
       Prn::print(Prn::Show1, "TxMsgCount               %-10d  %d",
          mMon_TxMsgCount.mValue, mMon_TxMsgCount.mDelta);
@@ -96,9 +96,9 @@ void MonitorThread::executeOnTimer(int aTimeCount)
    // Show.
    if (mShowCode == 2)
    {
-      ProtoComm::MsgMetrics* tTxMsgMetrics = (ProtoComm::MsgMetrics*)gProcThread->mMsgMonkey->mTxMsgMetrics;
-      ProtoComm::MsgMetrics* tRxMsgMetrics = (ProtoComm::MsgMetrics*)gProcThread->mMsgMonkey->mRxMsgMetrics;
-      Ris::SerialMsgPort* tMsgPort = (Ris::SerialMsgPort*)&gProcThread->mSerialMsgThread->mSerialMsgPort;
+      ProtoComm::MsgMetrics* tTxMsgMetrics = (ProtoComm::MsgMetrics*)gRequesterThread->mMsgMonkey->mTxMsgMetrics;
+      ProtoComm::MsgMetrics* tRxMsgMetrics = (ProtoComm::MsgMetrics*)gRequesterThread->mMsgMonkey->mRxMsgMetrics;
+      Ris::SerialMsgPort* tMsgPort = (Ris::SerialMsgPort*)&gRequesterThread->mSerialMsgThread->mSerialMsgPort;
 
       Prn::print(Prn::Show1, "TxMsgCount               %-10d  %d",
          mMon_TxMsgCount.mValue, mMon_TxMsgCount.mDelta);

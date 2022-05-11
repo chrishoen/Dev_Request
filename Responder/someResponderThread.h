@@ -175,7 +175,7 @@ public:
 //******************************************************************************
 // Global singular instance.
 
-#ifdef _SOMESERIALTHREAD_CPP_
+#ifdef _SOMERESPONDERTHREAD_CPP_
          ResponderThread* gResponderThread;
 #else
 extern   ResponderThread* gResponderThread;
