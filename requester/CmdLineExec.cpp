@@ -3,7 +3,6 @@
 
 #include "someSerialParms.h"
 #include "procoMsg.h"
-#include "procoMsgHelper.h"
 
 #include "someRequesterThread.h"
 #include "someMonitorThread.h"
@@ -63,14 +62,13 @@ void CmdLineExec::executeSend (Ris::CmdLineCmd* aCmd)
       case 1:
       {
          ProtoComm::TestMsg* tMsg = new ProtoComm::TestMsg;
-         ProtoComm::MsgHelper::initialize(tMsg);
          Some::gRequesterThread->sendMsg(tMsg);
          break;
       }
       case 5:
       {
          ProtoComm::DataMsg* tMsg = new ProtoComm::DataMsg;
-         ProtoComm::MsgHelper::initialize(tMsg);
+         tMsg->initialize();
          Some::gRequesterThread->sendMsg(tMsg);
          break;
       }
@@ -87,7 +85,7 @@ void CmdLineExec::executeEcho(Ris::CmdLineCmd* aCmd)
    int tNumWords = aCmd->argInt(1);
    
    ProtoComm::EchoRequestMsg* tMsg = new ProtoComm::EchoRequestMsg;
-   ProtoComm::MsgHelper::initialize(tMsg,tNumWords);
+   tMsg->initialize(tNumWords);
    Some::gRequesterThread->sendMsg(tMsg);
 }
 
@@ -98,8 +96,7 @@ void CmdLineExec::executeEcho(Ris::CmdLineCmd* aCmd)
 void CmdLineExec::executeData(Ris::CmdLineCmd* aCmd)
 {
    ProtoComm::DataMsg* tMsg = new ProtoComm::DataMsg;
-   ProtoComm::MsgHelper::initialize(tMsg);
-
+   tMsg->initialize();
    Some::gRequesterThread->sendMsg(tMsg);
 }
 
@@ -116,22 +113,8 @@ void CmdLineExec::executeAbort (Ris::CmdLineCmd* aCmd)
 //******************************************************************************
 //******************************************************************************
 
-void test1(Ris::ByteContent* aMsg)
-{
-   ProtoComm::BaseMsg* tMsg = (ProtoComm::BaseMsg*)aMsg;
-   Prn::print(0, "MessageType %d", tMsg->mMessageType);
-}
-
-void test2(Ris::ByteContent* aMsg)
-{
-   test1(aMsg);
-}
-
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
-   ProtoComm::TestMsg* tMsg = new ProtoComm::TestMsg;
-   test1(tMsg);
-   test2(tMsg);
 }
 
 //******************************************************************************

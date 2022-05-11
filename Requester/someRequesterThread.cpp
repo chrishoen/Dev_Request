@@ -6,7 +6,6 @@
 //******************************************************************************
 #include "stdafx.h"
 
-#include "procoMsgHelper.h"
 #include "someSerialParms.h"
 
 #define  _SOMEREQUESTERTHREAD_CPP_
@@ -139,20 +138,19 @@ void RequesterThread::executeOnTimer(int aTimerCount)
    if (mTPCode == 1)
    {
       ProtoComm::TestMsg* tTxMsg = new ProtoComm::TestMsg;
-      ProtoComm::MsgHelper::initialize(tTxMsg);
       tTxMsg->mCode1 = aTimerCount;
       sendMsg(tTxMsg);
    }
    else if (mTPCode == 2)
    {
       ProtoComm::EchoRequestMsg* tTxMsg = new ProtoComm::EchoRequestMsg;
-      ProtoComm::MsgHelper::initialize(tTxMsg);
+      tTxMsg->initialize(1000);
       sendMsg(tTxMsg);
    }
    else if (mTPCode == 3)
    {
       ProtoComm::ByteBlobMsg* tTxMsg = new ProtoComm::ByteBlobMsg;
-      ProtoComm::MsgHelper::initialize2(tTxMsg);
+      tTxMsg->initialize();
       sendMsg(tTxMsg);
    }
 }
@@ -236,7 +234,7 @@ void RequesterThread::processRxMsg(ProtoComm::TestMsg*  aRxMsg)
 {
    if (mShowCode == 3)
    {
-      ProtoComm::MsgHelper::show(Prn::Show1, aRxMsg);
+      aRxMsg->show(Prn::Show1);
    }
    delete aRxMsg;
 }
@@ -251,13 +249,13 @@ void RequesterThread::processRxMsg(ProtoComm::EchoRequestMsg* aRxMsg)
    if (true)
    {
       ProtoComm::EchoResponseMsg* tTxMsg = new ProtoComm::EchoResponseMsg;
-      ProtoComm::MsgHelper::initialize(tTxMsg, 1000);
+      tTxMsg->initialize(1000);
       tTxMsg->mCode1 = aRxMsg->mCode1;
       mSerialMsgThread->sendMsg(tTxMsg);
    }
    if (mShowCode == 3)
    {
-      ProtoComm::MsgHelper::show(Prn::Show1, aRxMsg);
+      aRxMsg->show(Prn::Show1);
    }
    delete aRxMsg;
 }
@@ -271,7 +269,7 @@ void RequesterThread::processRxMsg(ProtoComm::EchoResponseMsg* aRxMsg)
 {
    if (mShowCode == 3)
    {
-      ProtoComm::MsgHelper::show(Prn::Show1, aRxMsg);
+      aRxMsg->show(Prn::Show1);
    }
    delete aRxMsg;
 }
@@ -285,7 +283,7 @@ void RequesterThread::processRxMsg(ProtoComm::DataMsg* aRxMsg)
 {
    if (mShowCode == 3)
    {
-      ProtoComm::MsgHelper::show(Prn::Show1, aRxMsg);
+      aRxMsg->show(Prn::Show1);
    }
    delete aRxMsg;
 }
@@ -299,7 +297,7 @@ void RequesterThread::processRxMsg(ProtoComm::ByteBlobMsg* aRxMsg)
 {
    if (mShowCode == 3)
    {
-      ProtoComm::MsgHelper::show(Prn::Show1, aRxMsg);
+      aRxMsg->show(Prn::Show1);
    }
    delete aRxMsg;
 }
