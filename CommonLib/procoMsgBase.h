@@ -193,6 +193,8 @@ public:
    int   mFirstMessageMsgCount;
    int   mEchoRequestMsgCount;
    int   mEchoResponseMsgCount;
+   int   mRunRequestMsgCount;
+   int   mRunResponseMsgCount;
    int   mDataMsgCount;
    int   mByteBlobMsgCount;
 

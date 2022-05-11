@@ -72,23 +72,17 @@ void MonitorThread::executeOnTimer(int aTimeCount)
          mMon_TxByteCount.mValue, mMon_TxByteCount.mDelta);
 
       Prn::print(Prn::Show1, "TxTestMsgCount           %-10d", tTxMsgMetrics->mTestMsgCount);
-      Prn::print(Prn::Show1, "TxFirstMessageMsgCount   %-10d", tTxMsgMetrics->mFirstMessageMsgCount);
       Prn::print(Prn::Show1, "TxEchoRequestMsgCount    %-10d", tTxMsgMetrics->mEchoRequestMsgCount);
-      Prn::print(Prn::Show1, "TxEchoResponseMsgCount   %-10d", tTxMsgMetrics->mEchoResponseMsgCount);
-      Prn::print(Prn::Show1, "TxDataMsgCount           %-10d", tTxMsgMetrics->mDataMsgCount);
-      Prn::print(Prn::Show1, "TxByteBlobMsgCount       %-10d", tTxMsgMetrics->mByteBlobMsgCount);
-      
+      Prn::print(Prn::Show1, "TxRunRequestMsgCount     %-10d", tTxMsgMetrics->mRunRequestMsgCount);
+
       Prn::print(Prn::Show1, "RxMsgCount               %-10d  %d",
          mMon_RxMsgCount.mValue, mMon_RxMsgCount.mDelta);
       Prn::print(Prn::Show1, "RxByteCount              %-10lld  %lld",
          mMon_RxByteCount.mValue, mMon_RxByteCount.mDelta);
 
       Prn::print(Prn::Show1, "RxTestMsgCount           %-10d", tRxMsgMetrics->mTestMsgCount);
-      Prn::print(Prn::Show1, "RxFirstMessageMsgCount   %-10d", tRxMsgMetrics->mFirstMessageMsgCount);
-      Prn::print(Prn::Show1, "RxEchoRequestMsgCount    %-10d", tRxMsgMetrics->mEchoRequestMsgCount);
       Prn::print(Prn::Show1, "RxEchoResponseMsgCount   %-10d", tRxMsgMetrics->mEchoResponseMsgCount);
-      Prn::print(Prn::Show1, "RxDataMsgCount           %-10d", tRxMsgMetrics->mDataMsgCount);
-      Prn::print(Prn::Show1, "RxByteBlobMsgCount       %-10d", tRxMsgMetrics->mByteBlobMsgCount);
+      Prn::print(Prn::Show1, "RxRunResponseMsgCount    %-10d", tRxMsgMetrics->mRunResponseMsgCount);
 
       Prn::print(Prn::Show1, "");
    }

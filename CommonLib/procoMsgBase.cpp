@@ -201,6 +201,8 @@ MsgMetrics::MsgMetrics()
    mFirstMessageMsgCount = 0;
    mEchoRequestMsgCount = 0;
    mEchoResponseMsgCount = 0;
+   mRunRequestMsgCount = 0;
+   mRunResponseMsgCount = 0;
    mDataMsgCount = 0;
    mByteBlobMsgCount = 0;
 }
@@ -222,6 +224,8 @@ void MsgMetrics::update(Ris::ByteContent* aMsg, int aMsgLength)
    case MsgIdT::cFirstMessageMsg: mFirstMessageMsgCount++; break;
    case MsgIdT::cEchoRequestMsg: mEchoRequestMsgCount++; break;
    case MsgIdT::cEchoResponseMsg: mEchoResponseMsgCount++; break;
+   case MsgIdT::cRunRequestMsg: mRunRequestMsgCount++; break;
+   case MsgIdT::cRunResponseMsg: mRunResponseMsgCount++; break;
    case MsgIdT::cDataMsg: mDataMsgCount++; break;
    case MsgIdT::cByteBlobMsg: mByteBlobMsgCount++; break;
    default: break;
