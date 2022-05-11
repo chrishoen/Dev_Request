@@ -245,7 +245,6 @@ void DataMsg::initialize()
    mDouble = 2.34567;
    mBool = false;
 
-
    strcpy(mString1, "ABCDEFGH");
    strcpy(mString2, "abcdefgh");
 }
@@ -342,7 +341,7 @@ void ByteBlobMsg::copyToFrom(Ris::ByteBuffer* aBuffer)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Create a new message, based on a message type
+// Create a new message, based on a message type.
 
 void* createMsg(int aMessageType)
 {
