@@ -8,14 +8,14 @@
 #include "risPortableCalls.h"
 #include "risSerialSettings.h"
 
-#define  _PROCOSERIALPARMS_CPP_
-#include "procoSerialParms.h"
+#define  _SOMESERIALPARMS_CPP_
+#include "someSerialParms.h"
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 
-namespace ProtoComm
+namespace Some
 {
 
 //******************************************************************************

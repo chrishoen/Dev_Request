@@ -4,7 +4,7 @@
 #include "risThreadsProcess.h"
 #include "risBaseDir.h"
 
-#include "procoSerialParms.h"
+#include "someSerialParms.h"
 
 //******************************************************************************
 //******************************************************************************
@@ -63,8 +63,8 @@ void main_initialize(int argc,char** argv)
    //***************************************************************************
    // Read parameters files.
 
-   ProtoComm::gSerialParms.reset();
-   ProtoComm::gSerialParms.readSection("default");
+   Some::gSerialParms.reset();
+   Some::gSerialParms.readSection("default");
 }
 
 //******************************************************************************

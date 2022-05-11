@@ -15,7 +15,7 @@ Parameters class whose values are read from a command file.
 //******************************************************************************
 //******************************************************************************
 
-namespace ProtoComm
+namespace Some
 {
 
 //******************************************************************************
@@ -106,7 +106,7 @@ public:
 //******************************************************************************
 // Global instance.
 
-#ifdef _PROCOSERIALPARMS_CPP_
+#ifdef _SOMESERIALPARMS_CPP_
    SerialParms gSerialParms;
 #else
    extern SerialParms gSerialParms;

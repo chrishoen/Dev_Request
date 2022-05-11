@@ -1,16 +1,14 @@
 
 #include "stdafx.h"
 
-#include "procoSerialParms.h"
+#include "someSerialParms.h"
 #include "procoMsg.h"
 #include "procoMsgHelper.h"
 
-#include "procoProcThread.h"
-#include "procoMonitorThread.h"
+#include "someResponderThread.h"
+#include "someMonitorThread.h"
 
 #include "CmdLineExec.h"
-
-using namespace ProtoComm;
 
 //******************************************************************************
 //******************************************************************************
@@ -29,7 +27,7 @@ void CmdLineExec::reset()
 
 void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 {
-   if (aCmd->isCmd("TP"))        ProtoComm::gProcThread->mTPCode = aCmd->argInt(1);
+   if (aCmd->isCmd("TP"))        Some::gResponderThread->mTPCode = aCmd->argInt(1);
    if (aCmd->isCmd("SEND"))      executeSend(aCmd);
    if (aCmd->isCmd("ECHO"))      executeEcho(aCmd);
    if (aCmd->isCmd("DATA"))      executeData(aCmd);
@@ -47,8 +45,8 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::special(int aSpecial)
 {
-   ProtoComm::gProcThread->mShowCode = aSpecial;
-   ProtoComm::gMonitorThread->mShowCode = aSpecial;
+   Some::gResponderThread->mShowCode = aSpecial;
+   Some::gMonitorThread->mShowCode = aSpecial;
 }
 
 //******************************************************************************
@@ -65,15 +63,15 @@ void CmdLineExec::executeSend (Ris::CmdLineCmd* aCmd)
       case 1:
       {
          ProtoComm::TestMsg* tMsg = new ProtoComm::TestMsg;
-         MsgHelper::initialize(tMsg);
-         gProcThread->sendMsg(tMsg);
+         ProtoComm::MsgHelper::initialize(tMsg);
+         Some::gResponderThread->sendMsg(tMsg);
          break;
       }
       case 5:
       {
          ProtoComm::DataMsg* tMsg = new ProtoComm::DataMsg;
-         MsgHelper::initialize(tMsg);
-         gProcThread->sendMsg(tMsg);
+         ProtoComm::MsgHelper::initialize(tMsg);
+         Some::gResponderThread->sendMsg(tMsg);
          break;
       }
    }
@@ -89,8 +87,8 @@ void CmdLineExec::executeEcho(Ris::CmdLineCmd* aCmd)
    int tNumWords = aCmd->argInt(1);
    
    ProtoComm::EchoRequestMsg* tMsg = new ProtoComm::EchoRequestMsg;
-   MsgHelper::initialize(tMsg,tNumWords);
-   gProcThread->sendMsg(tMsg);
+   ProtoComm::MsgHelper::initialize(tMsg,tNumWords);
+   Some::gResponderThread->sendMsg(tMsg);
 }
 
 //******************************************************************************
@@ -100,9 +98,9 @@ void CmdLineExec::executeEcho(Ris::CmdLineCmd* aCmd)
 void CmdLineExec::executeData(Ris::CmdLineCmd* aCmd)
 {
    ProtoComm::DataMsg* tMsg = new ProtoComm::DataMsg;
-   MsgHelper::initialize(tMsg);
+   ProtoComm::MsgHelper::initialize(tMsg);
 
-   gProcThread->sendMsg(tMsg);
+   Some::gResponderThread->sendMsg(tMsg);
 }
 
 //******************************************************************************
@@ -111,7 +109,7 @@ void CmdLineExec::executeData(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeAbort (Ris::CmdLineCmd* aCmd)
 {
-   gProcThread->mAbortQCall();
+   Some::gResponderThread->mAbortQCall();
 }
 
 //******************************************************************************
@@ -169,7 +167,7 @@ void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeParms(Ris::CmdLineCmd* aCmd)
 {
-   ProtoComm::gSerialParms.show();
+   Some::gSerialParms.show();
 }
 
 //******************************************************************************

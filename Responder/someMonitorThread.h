@@ -11,7 +11,7 @@ Program monitor timer thread.
 #include "risThreadsTimerThread.h"
 #include "risMonitor.h"
 
-namespace ProtoComm
+namespace Some
 {
 //******************************************************************************
 //******************************************************************************
@@ -71,7 +71,7 @@ public:
 //******************************************************************************
 // Global instance.
 
-#ifdef _PROCOMONITORTHREAD_CPP_
+#ifdef _SOMEMONITORTHREAD_CPP_
            MonitorThread* gMonitorThread;
 #else
    extern  MonitorThread* gMonitorThread;
