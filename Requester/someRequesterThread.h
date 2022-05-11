@@ -155,10 +155,8 @@ public:
    // Receive message handlers. There is one for each message that can 
    // be received.
    void processRxMsg(ProtoComm::TestMsg*  aMsg);
-   void processRxMsg(ProtoComm::EchoRequestMsg* aMsg);
    void processRxMsg(ProtoComm::EchoResponseMsg* aMsg);
-   void processRxMsg(ProtoComm::DataMsg* aMsg);
-   void processRxMsg(ProtoComm::ByteBlobMsg* aMsg);
+   void processRxMsg(ProtoComm::RunResponseMsg* aMsg);
 
    //***************************************************************************
    //***************************************************************************

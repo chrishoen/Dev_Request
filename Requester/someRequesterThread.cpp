@@ -137,20 +137,13 @@ void RequesterThread::executeOnTimer(int aTimerCount)
 {
    if (mTPCode == 1)
    {
-      ProtoComm::TestMsg* tTxMsg = new ProtoComm::TestMsg;
-      tTxMsg->mCode1 = aTimerCount;
-      sendMsg(tTxMsg);
-   }
-   else if (mTPCode == 2)
-   {
       ProtoComm::EchoRequestMsg* tTxMsg = new ProtoComm::EchoRequestMsg;
       tTxMsg->initialize(1000);
       sendMsg(tTxMsg);
    }
-   else if (mTPCode == 3)
+   else if (mTPCode == 2)
    {
-      ProtoComm::ByteBlobMsg* tTxMsg = new ProtoComm::ByteBlobMsg;
-      tTxMsg->initialize();
+      ProtoComm::RunRequestMsg* tTxMsg = new ProtoComm::RunRequestMsg;
       sendMsg(tTxMsg);
    }
 }
@@ -205,17 +198,11 @@ void RequesterThread::executeRxMsg(Ris::ByteContent* aMsg)
    case ProtoComm::MsgIdT::cTestMsg:
       processRxMsg((ProtoComm::TestMsg*)tMsg);
       break;
-   case ProtoComm::MsgIdT::cEchoRequestMsg:
-      processRxMsg((ProtoComm::EchoRequestMsg*)tMsg);
-      break;
    case ProtoComm::MsgIdT::cEchoResponseMsg:
       processRxMsg((ProtoComm::EchoResponseMsg*)tMsg);
       break;
-   case ProtoComm::MsgIdT::cDataMsg:
-      processRxMsg((ProtoComm::DataMsg*)tMsg);
-      break;
-   case ProtoComm::MsgIdT::cByteBlobMsg:
-      processRxMsg((ProtoComm::ByteBlobMsg*)tMsg);
+   case ProtoComm::MsgIdT::cRunResponseMsg:
+      processRxMsg((ProtoComm::RunResponseMsg*)tMsg);
       break;
    default:
       Prn::print(Prn::Show1, "RequesterThread::executeServerRxMsg ??? %d", tMsg->mMessageType);
@@ -232,31 +219,7 @@ void RequesterThread::executeRxMsg(Ris::ByteContent* aMsg)
 
 void RequesterThread::processRxMsg(ProtoComm::TestMsg*  aRxMsg)
 {
-   if (mShowCode == 3)
-   {
-      aRxMsg->show(Prn::Show1);
-   }
-   delete aRxMsg;
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Rx message handler - EchoRequestMsg.
-
-void RequesterThread::processRxMsg(ProtoComm::EchoRequestMsg* aRxMsg)
-{
-   if (true)
-   {
-      ProtoComm::EchoResponseMsg* tTxMsg = new ProtoComm::EchoResponseMsg;
-      tTxMsg->initialize(1000);
-      tTxMsg->mCode1 = aRxMsg->mCode1;
-      mSerialMsgThread->sendMsg(tTxMsg);
-   }
-   if (mShowCode == 3)
-   {
-      aRxMsg->show(Prn::Show1);
-   }
+   aRxMsg->show(Prn::Show1);
    delete aRxMsg;
 }
 
@@ -277,23 +240,9 @@ void RequesterThread::processRxMsg(ProtoComm::EchoResponseMsg* aRxMsg)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Rx message handler - DataMsg.
+// Rx message handler - RunResponseMsg.
 
-void RequesterThread::processRxMsg(ProtoComm::DataMsg* aRxMsg)
-{
-   if (mShowCode == 3)
-   {
-      aRxMsg->show(Prn::Show1);
-   }
-   delete aRxMsg;
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Rx message handler - ByteBlobMsg.
-
-void RequesterThread::processRxMsg(ProtoComm::ByteBlobMsg* aRxMsg)
+void RequesterThread::processRxMsg(ProtoComm::RunResponseMsg* aRxMsg)
 {
    if (mShowCode == 3)
    {

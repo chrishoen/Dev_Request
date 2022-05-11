@@ -181,6 +181,60 @@ void EchoResponseMsg::copyToFrom(Ris::ByteBuffer* aBuffer)
 //******************************************************************************
 //******************************************************************************
 
+RunRequestMsg::RunRequestMsg()
+{
+   mMessageType = MsgIdT::cRunRequestMsg;
+
+   mCode1 = 101;
+}
+
+void RunRequestMsg::show(int aPF)
+{
+   Prn::print(aPF, "RunRequestMsg");
+   Prn::print(aPF, "Code1      %d", mCode1);
+   Prn::print(aPF, "");
+}
+
+void RunRequestMsg::copyToFrom(Ris::ByteBuffer* aBuffer)
+{
+   mHeader.headerCopyToFrom(aBuffer, this);
+
+   aBuffer->copy(&mCode1);
+
+   mHeader.headerReCopyToFrom(aBuffer, this);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+RunResponseMsg::RunResponseMsg()
+{
+   mMessageType = MsgIdT::cRunResponseMsg;
+
+   mCode1 = 201;
+}
+
+void RunResponseMsg::show(int aPF)
+{
+   Prn::print(aPF, "RunRequestMsg");
+   Prn::print(aPF, "Code1      %d", mCode1);
+   Prn::print(aPF, "");
+}
+
+void RunResponseMsg::copyToFrom(Ris::ByteBuffer* aBuffer)
+{
+   mHeader.headerCopyToFrom(aBuffer, this);
+
+   aBuffer->copy(&mCode1);
+
+   mHeader.headerReCopyToFrom(aBuffer, this);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
 DataRecord::DataRecord()
 {
    mCode1 = 0;
@@ -360,6 +414,12 @@ void* createMsg(int aMessageType)
       break;
    case MsgIdT::cEchoResponseMsg:
       tMsg = new EchoResponseMsg;
+      break;
+   case MsgIdT::cRunRequestMsg:
+      tMsg = new RunRequestMsg;
+      break;
+   case MsgIdT::cRunResponseMsg:
+      tMsg = new RunResponseMsg;
       break;
    case MsgIdT::cDataMsg:
       tMsg = new DataMsg;
