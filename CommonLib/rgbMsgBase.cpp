@@ -9,11 +9,11 @@
 
 
 
-#include "procoMsg.h"
-#include "procoMsgBase.h"
+#include "rgbMsg.h"
+#include "rgbMsgBase.h"
 
 
-namespace ProtoComm
+namespace RGB
 {
 //******************************************************************************
 //******************************************************************************
@@ -199,12 +199,12 @@ MsgMetrics::MsgMetrics()
 {
    mTestMsgCount = 0;
    mFirstMessageMsgCount = 0;
-   mEchoRequestMsgCount = 0;
-   mEchoResponseMsgCount = 0;
-   mRunRequestMsgCount = 0;
-   mRunResponseMsgCount = 0;
-   mDataMsgCount = 0;
-   mByteBlobMsgCount = 0;
+   mRedRequestMsgCount = 0;
+   mRedResponseMsgCount = 0;
+   mGreenRequestMsgCount = 0;
+   mGreenResponseMsgCount = 0;
+   mBlueRequestMsgCount = 0;
+   mBlueResponseMsgCount = 0;
 }
 
 // Update the metrics with a message and a length.
@@ -222,12 +222,12 @@ void MsgMetrics::update(Ris::ByteContent* aMsg, int aMsgLength)
    {
    case MsgIdT::cTestMsg: mTestMsgCount++; break;
    case MsgIdT::cFirstMessageMsg: mFirstMessageMsgCount++; break;
-   case MsgIdT::cEchoRequestMsg: mEchoRequestMsgCount++; break;
-   case MsgIdT::cEchoResponseMsg: mEchoResponseMsgCount++; break;
-   case MsgIdT::cRunRequestMsg: mRunRequestMsgCount++; break;
-   case MsgIdT::cRunResponseMsg: mRunResponseMsgCount++; break;
-   case MsgIdT::cDataMsg: mDataMsgCount++; break;
-   case MsgIdT::cByteBlobMsg: mByteBlobMsgCount++; break;
+   case MsgIdT::cRedRequestMsg: mRedRequestMsgCount++; break;
+   case MsgIdT::cRedResponseMsg: mRedResponseMsgCount++; break;
+   case MsgIdT::cGreenRequestMsg: mGreenRequestMsgCount++; break;
+   case MsgIdT::cGreenResponseMsg: mGreenResponseMsgCount++; break;
+   case MsgIdT::cBlueRequestMsg: mBlueRequestMsgCount++; break;
+   case MsgIdT::cBlueResponseMsg: mBlueResponseMsgCount++; break;
    default: break;
    }
 }
@@ -242,7 +242,7 @@ void MsgMetrics::update(Ris::ByteContent* aMsg, int aMsgLength)
 
 MsgMonkey::MsgMonkey()
    : Ris::BaseMsgMonkey(
-      ProtoComm::createMsg,
+      RGB::createMsg,
       &mStoreTxMsgMetrics,
       &mStoreRxMsgMetrics)
 {

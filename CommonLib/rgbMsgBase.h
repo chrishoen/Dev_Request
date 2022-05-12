@@ -36,7 +36,7 @@ EchoRequest
 #include "risByteContent.h"
 #include "risByteMsgMonkey.h"
 
-namespace ProtoComm
+namespace RGB
 {
 
 //******************************************************************************
@@ -191,12 +191,13 @@ public:
    // Specific message metrics.
    int   mTestMsgCount;
    int   mFirstMessageMsgCount;
-   int   mEchoRequestMsgCount;
-   int   mEchoResponseMsgCount;
-   int   mRunRequestMsgCount;
-   int   mRunResponseMsgCount;
-   int   mDataMsgCount;
-   int   mByteBlobMsgCount;
+   int   mRedRequestMsgCount;
+   int   mRedResponseMsgCount;
+   int   mGreenRequestMsgCount;
+   int   mGreenResponseMsgCount;
+   int   mBlueRequestMsgCount;
+   int   mBlueResponseMsgCount;
+
 
    //***************************************************************************
    //***************************************************************************
