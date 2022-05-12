@@ -4,7 +4,7 @@
 #include "someSerialParms.h"
 #include "rgbMsg.h"
 
-#include "someRequesterThread.h"
+#include "someScriptRunnerThread.h"
 #include "someMonitorThread.h"
 
 #include "CmdLineExec.h"
@@ -26,7 +26,7 @@ void CmdLineExec::reset()
 
 void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 {
-   if (aCmd->isCmd("TP"))        Some::gRequesterThread->mTPCode = aCmd->argInt(1);
+   if (aCmd->isCmd("TP"))        Some::gScriptRunnerThread->mTPCode = aCmd->argInt(1);
    if (aCmd->isCmd("SEND"))      executeSend(aCmd);
    if (aCmd->isCmd("ABORT"))     executeAbort(aCmd);
    if (aCmd->isCmd("GO1"))       executeGo1(aCmd);
@@ -42,7 +42,7 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::special(int aSpecial)
 {
-   Some::gRequesterThread->mShowCode = aSpecial;
+   Some::gScriptRunnerThread->mShowCode = aSpecial;
    Some::gMonitorThread->mShowCode = aSpecial;
 }
 
@@ -56,7 +56,7 @@ void CmdLineExec::executeSend (Ris::CmdLineCmd* aCmd)
    int tMsgType= aCmd->argInt(1);
 
    RGB::TestMsg* tMsg = new RGB::TestMsg;
-   Some::gRequesterThread->sendMsg(tMsg);
+   Some::gScriptRunnerThread->sendMsg(tMsg);
 }
 
 //******************************************************************************
@@ -65,7 +65,7 @@ void CmdLineExec::executeSend (Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeAbort (Ris::CmdLineCmd* aCmd)
 {
-   Some::gRequesterThread->mAbortQCall();
+   Some::gScriptRunnerThread->mAbortQCall();
 }
 
 //******************************************************************************

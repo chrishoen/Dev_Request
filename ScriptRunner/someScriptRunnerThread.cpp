@@ -8,8 +8,8 @@
 
 #include "someSerialParms.h"
 
-#define  _SOMEREQUESTERTHREAD_CPP_
-#include "someRequesterThread.h"
+#define  _SOMESCRIPTRUNNERTHREAD_CPP_
+#include "someScriptRunnerThread.h"
 
 namespace Some
 {
@@ -19,17 +19,17 @@ namespace Some
 //******************************************************************************
 // Constructor.
 
-RequesterThread::RequesterThread()
+ScriptRunnerThread::ScriptRunnerThread()
 {
    // Set base class variables.
-   BaseClass::setThreadName("Proc");
+   BaseClass::setThreadName("ScriptRunner");
    BaseClass::setThreadPriority(Ris::Threads::gPriorities.mProc);
    BaseClass::mTimerPeriod = 100;
 
    // Initialize qcalls.
-   mSessionQCall.bind(this, &RequesterThread::executeSession);
-   mRxMsgQCall.bind   (this,&RequesterThread::executeRxMsg);
-   mAbortQCall.bind(this, &RequesterThread::executeAbort);
+   mSessionQCall.bind(this, &ScriptRunnerThread::executeSession);
+   mRxMsgQCall.bind   (this,&ScriptRunnerThread::executeRxMsg);
+   mAbortQCall.bind(this, &ScriptRunnerThread::executeAbort);
 
    // Initialize member variables.
    mSerialMsgThread = 0;
@@ -41,7 +41,7 @@ RequesterThread::RequesterThread()
    mShowCode = 0;
 }
 
-RequesterThread::~RequesterThread()
+ScriptRunnerThread::~ScriptRunnerThread()
 {
    if (mSerialMsgThread) delete mSerialMsgThread;
    delete mMsgMonkey;
@@ -52,7 +52,7 @@ RequesterThread::~RequesterThread()
 //******************************************************************************
 // Show thread info for this thread and for child threads.
 
-void RequesterThread::showThreadInfo()
+void ScriptRunnerThread::showThreadInfo()
 {
    BaseClass::showThreadInfo();
    if (mSerialMsgThread)
@@ -68,9 +68,9 @@ void RequesterThread::showThreadInfo()
 // after the thread starts running. It creates and launches the 
 // child SerialMsgThread.
 
-void RequesterThread::threadInitFunction()
+void ScriptRunnerThread::threadInitFunction()
 {
-   Trc::write(11, 0, "RequesterThread::threadInitFunction");
+   Trc::write(11, 0, "ScriptRunnerThread::threadInitFunction");
 
    // Instance of serial port settings.
    Ris::SerialSettings tSerialSettings;
@@ -91,7 +91,7 @@ void RequesterThread::threadInitFunction()
    // Launch child thread.
    mSerialMsgThread->launchThread(); 
 
-   Trc::write(11, 0, "RequesterThread::threadInitFunction done");
+   Trc::write(11, 0, "ScriptRunnerThread::threadInitFunction done");
 }
 
 //******************************************************************************
@@ -100,16 +100,16 @@ void RequesterThread::threadInitFunction()
 // Thread exit function. This is called by the base class immedidately
 // before the thread is terminated. It shuts down the child SerialMsgThread.
 
-void RequesterThread::threadExitFunction()
+void ScriptRunnerThread::threadExitFunction()
 {
-   Trc::write(11, 0, "RequesterThread::threadExitFunction");
-   Prn::print(0, "RequesterThread::threadExitFunction BEGIN");
+   Trc::write(11, 0, "ScriptRunnerThread::threadExitFunction");
+   Prn::print(0, "ScriptRunnerThread::threadExitFunction BEGIN");
 
    // Shutdown the child thread.
    mSerialMsgThread->shutdownThread();
 
-   Prn::print(0, "RequesterThread::threadExitFunction END");
-   Trc::write(11, 0, "RequesterThread::threadExitFunction done");
+   Prn::print(0, "ScriptRunnerThread::threadExitFunction END");
+   Trc::write(11, 0, "ScriptRunnerThread::threadExitFunction done");
 }
 
 //******************************************************************************
@@ -119,13 +119,13 @@ void RequesterThread::threadExitFunction()
 // function to terminate the thread. This executes in the context of
 // the calling thread.
 
-void RequesterThread::shutdownThread()
+void ScriptRunnerThread::shutdownThread()
 {
-   Trc::write(11, 0, "RequesterThread::shutdownThread");
-   Prn::print(0, "RequesterThread::shutdownThread BEGIN");
+   Trc::write(11, 0, "ScriptRunnerThread::shutdownThread");
+   Prn::print(0, "ScriptRunnerThread::shutdownThread BEGIN");
    BaseClass::shutdownThread();
-   Prn::print(0, "RequesterThread::shutdownThread END");
-   Trc::write(11, 0, "RequesterThread::shutdownThread done");
+   Prn::print(0, "ScriptRunnerThread::shutdownThread END");
+   Trc::write(11, 0, "ScriptRunnerThread::shutdownThread done");
 }
 
 //******************************************************************************
@@ -133,7 +133,7 @@ void RequesterThread::shutdownThread()
 //******************************************************************************
 // Execute periodically. This is called by the base class timer.
 
-void RequesterThread::executeOnTimer(int aTimerCount)
+void ScriptRunnerThread::executeOnTimer(int aTimerCount)
 {
    if (mTPCode == 1)
    {
@@ -157,7 +157,7 @@ void RequesterThread::executeOnTimer(int aTimerCount)
 //******************************************************************************
 // Abort function. This is bound to the qcall. It aborts the serial port.
 
-void RequesterThread::executeAbort()
+void ScriptRunnerThread::executeAbort()
 {
    mSerialMsgThread->mSerialMsgPort.doAbort();
 }
@@ -169,15 +169,15 @@ void RequesterThread::executeAbort()
 // when a session is established or disestablished (when the serial port
 // is opened or it is closed because of an error or a disconnection). 
 
-void RequesterThread::executeSession(bool aConnected)
+void ScriptRunnerThread::executeSession(bool aConnected)
 {
    if (aConnected)
    {
-      Prn::print(Prn::Show1, "RequesterThread CONNECTED");
+      Prn::print(Prn::Show1, "ScriptRunnerThread CONNECTED");
    }
    else
    {
-      Prn::print(Prn::Show1, "RequesterThread DISCONNECTED");
+      Prn::print(Prn::Show1, "ScriptRunnerThread DISCONNECTED");
    }
 
    mConnectionFlag = aConnected;
@@ -191,7 +191,7 @@ void RequesterThread::executeSession(bool aConnected)
 // Based on the receive message type, call one of the specific receive
 // message handlers. This is bound to the qcall.
 
-void RequesterThread::executeRxMsg(Ris::ByteContent* aMsg)
+void ScriptRunnerThread::executeRxMsg(Ris::ByteContent* aMsg)
 {
    RGB::BaseMsg* tMsg = (RGB::BaseMsg*)aMsg;
 
@@ -212,7 +212,7 @@ void RequesterThread::executeRxMsg(Ris::ByteContent* aMsg)
       processRxMsg((RGB::BlueResponseMsg*)tMsg);
       break;
    default:
-      Prn::print(Prn::Show1, "RequesterThread::executeServerRxMsg ??? %d", tMsg->mMessageType);
+      Prn::print(Prn::Show1, "ScriptRunnerThread::executeServerRxMsg ??? %d", tMsg->mMessageType);
       delete tMsg;
       break;
    }
@@ -224,7 +224,7 @@ void RequesterThread::executeRxMsg(Ris::ByteContent* aMsg)
 //******************************************************************************
 // Message handler - TestMsg.
 
-void RequesterThread::processRxMsg(RGB::TestMsg*  aRxMsg)
+void ScriptRunnerThread::processRxMsg(RGB::TestMsg*  aRxMsg)
 {
    aRxMsg->show(Prn::Show1);
    delete aRxMsg;
@@ -235,7 +235,7 @@ void RequesterThread::processRxMsg(RGB::TestMsg*  aRxMsg)
 //******************************************************************************
 // Rx message handler - RedResponseMsg.
 
-void RequesterThread::processRxMsg(RGB::RedResponseMsg* aRxMsg)
+void ScriptRunnerThread::processRxMsg(RGB::RedResponseMsg* aRxMsg)
 {
    if (mShowCode == 3)
    {
@@ -249,7 +249,7 @@ void RequesterThread::processRxMsg(RGB::RedResponseMsg* aRxMsg)
 //******************************************************************************
 // Rx message handler - GreenResponseMsg.
 
-void RequesterThread::processRxMsg(RGB::GreenResponseMsg* aRxMsg)
+void ScriptRunnerThread::processRxMsg(RGB::GreenResponseMsg* aRxMsg)
 {
    if (mShowCode == 3)
    {
@@ -263,7 +263,7 @@ void RequesterThread::processRxMsg(RGB::GreenResponseMsg* aRxMsg)
 //******************************************************************************
 // Rx message handler - BlueResponseMsg.
 
-void RequesterThread::processRxMsg(RGB::BlueResponseMsg* aRxMsg)
+void ScriptRunnerThread::processRxMsg(RGB::BlueResponseMsg* aRxMsg)
 {
    if (mShowCode == 3)
    {
@@ -277,7 +277,7 @@ void RequesterThread::processRxMsg(RGB::BlueResponseMsg* aRxMsg)
 //******************************************************************************
 // Send a message via mSerialMsgThread:
 
-void RequesterThread::sendMsg(RGB::BaseMsg* aTxMsg)
+void ScriptRunnerThread::sendMsg(RGB::BaseMsg* aTxMsg)
 {
    mSerialMsgThread->sendMsg(aTxMsg);
    mTxCount++;
@@ -288,7 +288,7 @@ void RequesterThread::sendMsg(RGB::BaseMsg* aTxMsg)
 //******************************************************************************
 // Send a message via mSerialMsgThread:
 
-void RequesterThread::sendTestMsg()
+void ScriptRunnerThread::sendTestMsg()
 {
    RGB::TestMsg* tMsg = new RGB::TestMsg;
    tMsg->mCode1 = 201;

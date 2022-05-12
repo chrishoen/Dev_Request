@@ -7,7 +7,7 @@ Description:
 //******************************************************************************
 #include "stdafx.h"
 
-#include "someRequesterThread.h"
+#include "someScriptRunnerThread.h"
 
 #define  _SOMEMONITORTHREAD_CPP_
 #include "someMonitorThread.h"
@@ -32,8 +32,8 @@ MonitorThread::MonitorThread()
    mShowCode = 0;
 
    // Bind member variables.
-   RGB::MsgMetrics* tTxMsgMetrics = (RGB::MsgMetrics*)gRequesterThread->mMsgMonkey->mTxMsgMetrics;
-   RGB::MsgMetrics* tRxMsgMetrics = (RGB::MsgMetrics*)gRequesterThread->mMsgMonkey->mRxMsgMetrics;
+   RGB::MsgMetrics* tTxMsgMetrics = (RGB::MsgMetrics*)gScriptRunnerThread->mMsgMonkey->mTxMsgMetrics;
+   RGB::MsgMetrics* tRxMsgMetrics = (RGB::MsgMetrics*)gScriptRunnerThread->mMsgMonkey->mRxMsgMetrics;
 
    mMon_TxMsgCount.bind(&tTxMsgMetrics->mMsgCount);
    mMon_TxByteCount.bind(&tTxMsgMetrics->mByteCount);
@@ -77,8 +77,8 @@ void MonitorThread::executeOnTimer(int aTimeCount)
    // Show.
    if (mShowCode == 1)
    {
-      RGB::MsgMetrics* tTxMsgMetrics = (RGB::MsgMetrics*)gRequesterThread->mMsgMonkey->mTxMsgMetrics;
-      RGB::MsgMetrics* tRxMsgMetrics = (RGB::MsgMetrics*)gRequesterThread->mMsgMonkey->mRxMsgMetrics;
+      RGB::MsgMetrics* tTxMsgMetrics = (RGB::MsgMetrics*)gScriptRunnerThread->mMsgMonkey->mTxMsgMetrics;
+      RGB::MsgMetrics* tRxMsgMetrics = (RGB::MsgMetrics*)gScriptRunnerThread->mMsgMonkey->mRxMsgMetrics;
 
       Prn::print(Prn::Show1, "TxMsgCount               %-10d  %d",
          mMon_TxMsgCount.mValue, mMon_TxMsgCount.mDelta);
@@ -114,9 +114,9 @@ void MonitorThread::executeOnTimer(int aTimeCount)
    // Show.
    if (mShowCode == 2)
    {
-      RGB::MsgMetrics* tTxMsgMetrics = (RGB::MsgMetrics*)gRequesterThread->mMsgMonkey->mTxMsgMetrics;
-      RGB::MsgMetrics* tRxMsgMetrics = (RGB::MsgMetrics*)gRequesterThread->mMsgMonkey->mRxMsgMetrics;
-      Ris::SerialMsgPort* tMsgPort = (Ris::SerialMsgPort*)&gRequesterThread->mSerialMsgThread->mSerialMsgPort;
+      RGB::MsgMetrics* tTxMsgMetrics = (RGB::MsgMetrics*)gScriptRunnerThread->mMsgMonkey->mTxMsgMetrics;
+      RGB::MsgMetrics* tRxMsgMetrics = (RGB::MsgMetrics*)gScriptRunnerThread->mMsgMonkey->mRxMsgMetrics;
+      Ris::SerialMsgPort* tMsgPort = (Ris::SerialMsgPort*)&gScriptRunnerThread->mSerialMsgThread->mSerialMsgPort;
 
       Prn::print(Prn::Show1, "TxMsgCount               %-10d  %d",
          mMon_TxMsgCount.mValue, mMon_TxMsgCount.mDelta);

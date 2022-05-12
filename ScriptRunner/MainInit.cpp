@@ -80,7 +80,7 @@ void main_finalize()
    // Exit process
    Ris::Threads::exitProcess();
 
-   printf("Requester Program**********************************************BEGIN\n");
+   printf("ScriptRunner Program**********************************************BEGIN\n");
 }
 
 //******************************************************************************

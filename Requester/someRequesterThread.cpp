@@ -22,7 +22,7 @@ namespace Some
 RequesterThread::RequesterThread()
 {
    // Set base class variables.
-   BaseClass::setThreadName("Proc");
+   BaseClass::setThreadName("Requester");
    BaseClass::setThreadPriority(Ris::Threads::gPriorities.mProc);
    BaseClass::mTimerPeriod = 100;
 

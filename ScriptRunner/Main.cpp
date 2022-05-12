@@ -6,7 +6,7 @@
 #include "CmdLineExec.h"
 #include "MainInit.h"
 
-#include "someRequesterThread.h"
+#include "someScriptRunnerThread.h"
 #include "someMonitorThread.h"
 
 //******************************************************************************
@@ -27,8 +27,8 @@ int main(int argc,char** argv)
    //***************************************************************************
    // Launch program threads.
 
-   Some::gRequesterThread = new Some::RequesterThread;
-   Some::gRequesterThread->launchThread();
+   Some::gScriptRunnerThread = new Some::ScriptRunnerThread;
+   Some::gScriptRunnerThread->launchThread();
 
    Some::gMonitorThread = new Some::MonitorThread;
    Some::gMonitorThread->launchThread();
@@ -39,7 +39,7 @@ int main(int argc,char** argv)
    // Show program threads.
 
    Ris::Threads::showCurrentThreadInfo();
-   Some::gRequesterThread->showThreadInfo();
+   Some::gScriptRunnerThread->showThreadInfo();
    Some::gMonitorThread->showThreadInfo();
 
    //***************************************************************************
@@ -60,9 +60,9 @@ int main(int argc,char** argv)
    delete Some::gMonitorThread;
    Some::gMonitorThread = 0;
 
-   Some::gRequesterThread->shutdownThread();
-   delete Some::gRequesterThread;
-   Some::gRequesterThread = 0;
+   Some::gScriptRunnerThread->shutdownThread();
+   delete Some::gScriptRunnerThread;
+   Some::gScriptRunnerThread = 0;
 
    //***************************************************************************
    //***************************************************************************

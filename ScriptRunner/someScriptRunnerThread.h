@@ -49,7 +49,7 @@ namespace Some
 // messages.
 //
 
-class  RequesterThread : public Ris::Threads::BaseQCallThread
+class  ScriptRunnerThread : public Ris::Threads::BaseQCallThread
 {
 public:
    typedef Ris::Threads::BaseQCallThread BaseClass;
@@ -86,8 +86,8 @@ public:
    // Methods.
 
    // Constructor.
-   RequesterThread();
-  ~RequesterThread();
+   ScriptRunnerThread();
+  ~ScriptRunnerThread();
 
    //***************************************************************************
    //***************************************************************************
@@ -174,10 +174,10 @@ public:
 //******************************************************************************
 // Global singular instance.
 
-#ifdef _SOMEREQUESTERTHREAD_CPP_
-         RequesterThread* gRequesterThread;
+#ifdef _SOMESCRIPTRUNNERTHREAD_CPP_
+         ScriptRunnerThread* gScriptRunnerThread;
 #else
-extern   RequesterThread* gRequesterThread;
+extern   ScriptRunnerThread* gScriptRunnerThread;
 #endif
 
 //******************************************************************************
