@@ -117,7 +117,7 @@ public:
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Methods. Session qcall.
+   // Methods. qcalls.
 
    // qcall registered to the mSerialMsgThread child thread. It is invoked
    // when a session is established or disestablished (when the serial port
@@ -127,11 +127,6 @@ public:
    // Maintain session state variables. This is bound to the qcall.
    void executeSession(bool aConnected);
 
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Methods. Receive message qcall.
-
    // qcall registered to the mSerialMsgThread child thread. It is invoked by
    // the child thread when a message is received.
    Ris::SerialMsgThread::RxMsgQCall mRxMsgQCall;
@@ -139,6 +134,11 @@ public:
    // Based on the receive message type, call one of the specific receive
    // message handlers. This is bound to the qcall.
    void executeRxMsg(Ris::ByteContent* aMsg);
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods. qcalls.
 
    // Abort qcall. It is invoked by the control thread to execute a
    // an abort in the context of this thread.

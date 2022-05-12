@@ -42,8 +42,15 @@ public:
    // Message counts.
    Ris::Monitor<int> mMon_TxMsgCount;
    Ris::Monitor<long long> mMon_TxByteCount;
+   Ris::Monitor<int> mMon_TxRedResponseMsgCount;
+   Ris::Monitor<int> mMon_TxGreenResponseMsgCount;
+   Ris::Monitor<int> mMon_TxBlueResponseMsgCount;
+
    Ris::Monitor<int> mMon_RxMsgCount;
    Ris::Monitor<long long> mMon_RxByteCount;
+   Ris::Monitor<int> mMon_RxRedRequestMsgCount;
+   Ris::Monitor<int> mMon_RxGreenRequestMsgCount;
+   Ris::Monitor<int> mMon_RxBlueRequestMsgCount;
 
    //***************************************************************************
    //***************************************************************************
