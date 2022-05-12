@@ -37,17 +37,31 @@ MonitorThread::MonitorThread()
 
    mMon_TxMsgCount.bind(&tTxMsgMetrics->mMsgCount);
    mMon_TxByteCount.bind(&tTxMsgMetrics->mByteCount);
+   mMon_TxRedRequestMsgCount.bind(&tTxMsgMetrics->mRedRequestMsgCount);
+   mMon_TxGreenRequestMsgCount.bind(&tTxMsgMetrics->mGreenRequestMsgCount);
+   mMon_TxBlueRequestMsgCount.bind(&tTxMsgMetrics->mBlueRequestMsgCount);
+
    mMon_RxMsgCount.bind(&tRxMsgMetrics->mMsgCount);
    mMon_RxByteCount.bind(&tRxMsgMetrics->mByteCount);
+   mMon_RxRedResponseMsgCount.bind(&tRxMsgMetrics->mRedResponseMsgCount);
+   mMon_RxGreenResponseMsgCount.bind(&tRxMsgMetrics->mGreenResponseMsgCount);
+   mMon_RxBlueResponseMsgCount.bind(&tRxMsgMetrics->mBlueResponseMsgCount);
 }
 
 // Update status variables.
 void MonitorThread::update()
 {
    mMon_TxMsgCount.update();
-   mMon_RxMsgCount.update();
    mMon_TxByteCount.update();
+   mMon_TxRedRequestMsgCount.update();
+   mMon_TxGreenRequestMsgCount.update();
+   mMon_TxBlueRequestMsgCount.update();
+
+   mMon_RxMsgCount.update();
    mMon_RxByteCount.update();
+   mMon_RxRedResponseMsgCount.update();
+   mMon_RxGreenResponseMsgCount.update();
+   mMon_RxBlueResponseMsgCount.update();
 }
 
 //******************************************************************************
@@ -72,9 +86,13 @@ void MonitorThread::executeOnTimer(int aTimeCount)
          mMon_TxByteCount.mValue, mMon_TxByteCount.mDelta);
 
       Prn::print(Prn::Show1, "TxTestMsgCount           %-10d", tTxMsgMetrics->mTestMsgCount);
-      Prn::print(Prn::Show1, "TxRedRequestMsgCount     %-10d", tTxMsgMetrics->mRedRequestMsgCount);
-      Prn::print(Prn::Show1, "TxGreenRequestMsgCount   %-10d", tTxMsgMetrics->mGreenRequestMsgCount);
-      Prn::print(Prn::Show1, "TxBlueRequestMsgCount    %-10d", tTxMsgMetrics->mBlueRequestMsgCount);
+
+      Prn::print(Prn::Show1, "TxRedRequestMsgCount     %-10d  %d",
+         mMon_TxRedRequestMsgCount.mValue, mMon_TxRedRequestMsgCount.mDelta);
+      Prn::print(Prn::Show1, "TxGreenRequestMsgCount   %-10d  %d",
+         mMon_TxGreenRequestMsgCount.mValue, mMon_TxGreenRequestMsgCount.mDelta);
+      Prn::print(Prn::Show1, "TxBlueRequestMsgCount    %-10d  %d",
+         mMon_TxBlueRequestMsgCount.mValue, mMon_TxBlueRequestMsgCount.mDelta);
 
       Prn::print(Prn::Show1, "RxMsgCount               %-10d  %d",
          mMon_RxMsgCount.mValue, mMon_RxMsgCount.mDelta);
@@ -82,9 +100,13 @@ void MonitorThread::executeOnTimer(int aTimeCount)
          mMon_RxByteCount.mValue, mMon_RxByteCount.mDelta);
 
       Prn::print(Prn::Show1, "RxTestMsgCount           %-10d", tRxMsgMetrics->mTestMsgCount);
-      Prn::print(Prn::Show1, "RxRedResponseMsgCount    %-10d", tRxMsgMetrics->mRedResponseMsgCount);
-      Prn::print(Prn::Show1, "RxGreenResponseMsgCount  %-10d", tRxMsgMetrics->mGreenResponseMsgCount);
-      Prn::print(Prn::Show1, "RxBlueResponseMsgCount   %-10d", tRxMsgMetrics->mBlueResponseMsgCount);
+
+      Prn::print(Prn::Show1, "RxRedResponseMsgCount    %-10d  %d",
+         mMon_RxRedResponseMsgCount.mValue, mMon_RxRedResponseMsgCount.mDelta);
+      Prn::print(Prn::Show1, "RxGreenResponseMsgCount  %-10d  %d",
+         mMon_RxGreenResponseMsgCount.mValue, mMon_RxGreenResponseMsgCount.mDelta);
+      Prn::print(Prn::Show1, "RxBlueResponseMsgCount   %-10d  %d",
+         mMon_RxBlueResponseMsgCount.mValue, mMon_RxBlueResponseMsgCount.mDelta);
 
       Prn::print(Prn::Show1, "");
    }
