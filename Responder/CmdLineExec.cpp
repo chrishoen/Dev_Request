@@ -2,7 +2,7 @@
 #include "stdafx.h"
 
 #include "someSerialParms.h"
-#include "procoMsg.h"
+#include "rgbMsg.h"
 
 #include "someResponderThread.h"
 #include "someMonitorThread.h"
@@ -55,7 +55,7 @@ void CmdLineExec::executeSend (Ris::CmdLineCmd* aCmd)
    aCmd->setArgDefault(1,1);
    int tMsgType= aCmd->argInt(1);
 
-   ProtoComm::TestMsg* tMsg = new ProtoComm::TestMsg;
+   RGB::TestMsg* tMsg = new RGB::TestMsg;
    Some::gResponderThread->sendMsg(tMsg);
 }
 
@@ -82,8 +82,8 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
-   ProtoComm::MsgMetrics tMsgMetrics;
-   ProtoComm::TestMsg* tMsg = new ProtoComm::TestMsg;
+   RGB::MsgMetrics tMsgMetrics;
+   RGB::TestMsg* tMsg = new RGB::TestMsg;
    tMsgMetrics.update(tMsg, 100);
 }
 

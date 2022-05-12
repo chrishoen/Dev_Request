@@ -33,7 +33,7 @@ ResponderThread::ResponderThread()
 
    // Initialize member variables.
    mSerialMsgThread = 0;
-   mMsgMonkey = new ProtoComm::MsgMonkey;
+   mMsgMonkey = new RGB::MsgMonkey;
    mConnectionFlag = false;
    mTPCode = 0;
    mRxCount = 0;
@@ -137,7 +137,7 @@ void ResponderThread::executeOnTimer(int aTimerCount)
 {
    if (mTPCode == 1)
    {
-      ProtoComm::TestMsg* tTxMsg = new ProtoComm::TestMsg;
+      RGB::TestMsg* tTxMsg = new RGB::TestMsg;
       tTxMsg->mCode1 = aTimerCount;
       sendMsg(tTxMsg);
    }
@@ -184,20 +184,23 @@ void ResponderThread::executeSession(bool aConnected)
 
 void ResponderThread::executeRxMsg(Ris::ByteContent* aMsg)
 {
-   ProtoComm::BaseMsg* tMsg = (ProtoComm::BaseMsg*)aMsg;
+   RGB::BaseMsg* tMsg = (RGB::BaseMsg*)aMsg;
 
    // Message jump table based on message type.
    // Call corresponding specfic message handler method.
    switch (tMsg->mMessageType)
    {
-   case ProtoComm::MsgIdT::cTestMsg:
-      processRxMsg((ProtoComm::TestMsg*)tMsg);
+   case RGB::MsgIdT::cTestMsg:
+      processRxMsg((RGB::TestMsg*)tMsg);
       break;
-   case ProtoComm::MsgIdT::cEchoRequestMsg:
-      processRxMsg((ProtoComm::EchoRequestMsg*)tMsg);
+   case RGB::MsgIdT::cRedRequestMsg:
+      processRxMsg((RGB::RedRequestMsg*)tMsg);
       break;
-   case ProtoComm::MsgIdT::cRunRequestMsg:
-      processRxMsg((ProtoComm::RunRequestMsg*)tMsg);
+   case RGB::MsgIdT::cGreenRequestMsg:
+      processRxMsg((RGB::GreenRequestMsg*)tMsg);
+      break;
+   case RGB::MsgIdT::cBlueRequestMsg:
+      processRxMsg((RGB::BlueRequestMsg*)tMsg);
       break;
    default:
       Prn::print(Prn::Show1, "ResponderThread::executeServerRxMsg ??? %d", tMsg->mMessageType);
@@ -212,7 +215,7 @@ void ResponderThread::executeRxMsg(Ris::ByteContent* aMsg)
 //******************************************************************************
 // Message handler - TestMsg.
 
-void ResponderThread::processRxMsg(ProtoComm::TestMsg*  aRxMsg)
+void ResponderThread::processRxMsg(RGB::TestMsg*  aRxMsg)
 {
    aRxMsg->show(Prn::Show1);
    delete aRxMsg;
@@ -221,14 +224,13 @@ void ResponderThread::processRxMsg(ProtoComm::TestMsg*  aRxMsg)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Rx message handler - EchoRequestMsg.
+// Rx message handler - RedRequestMsg.
 
-void ResponderThread::processRxMsg(ProtoComm::EchoRequestMsg* aRxMsg)
+void ResponderThread::processRxMsg(RGB::RedRequestMsg* aRxMsg)
 {
    if (true)
    {
-      ProtoComm::EchoResponseMsg* tTxMsg = new ProtoComm::EchoResponseMsg;
-      tTxMsg->initialize(1000);
+      RGB::RedResponseMsg* tTxMsg = new RGB::RedResponseMsg;
       tTxMsg->mCode1 = aRxMsg->mCode1;
       mSerialMsgThread->sendMsg(tTxMsg);
    }
@@ -242,13 +244,33 @@ void ResponderThread::processRxMsg(ProtoComm::EchoRequestMsg* aRxMsg)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Rx message handler - RunRequestMsg.
+// Rx message handler - GreenRequestMsg.
 
-void ResponderThread::processRxMsg(ProtoComm::RunRequestMsg* aRxMsg)
+void ResponderThread::processRxMsg(RGB::GreenRequestMsg* aRxMsg)
 {
    if (true)
    {
-      ProtoComm::RunResponseMsg* tTxMsg = new ProtoComm::RunResponseMsg;
+      RGB::GreenResponseMsg* tTxMsg = new RGB::GreenResponseMsg;
+      tTxMsg->mCode1 = aRxMsg->mCode1;
+      mSerialMsgThread->sendMsg(tTxMsg);
+   }
+   if (mShowCode == 3)
+   {
+      aRxMsg->show(Prn::Show1);
+   }
+   delete aRxMsg;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Rx message handler - BlueRequestMsg.
+
+void ResponderThread::processRxMsg(RGB::BlueRequestMsg* aRxMsg)
+{
+   if (true)
+   {
+      RGB::BlueResponseMsg* tTxMsg = new RGB::BlueResponseMsg;
       tTxMsg->mCode1 = aRxMsg->mCode1;
       mSerialMsgThread->sendMsg(tTxMsg);
    }
@@ -264,7 +286,7 @@ void ResponderThread::processRxMsg(ProtoComm::RunRequestMsg* aRxMsg)
 //******************************************************************************
 // Send a message via mSerialMsgThread:
 
-void ResponderThread::sendMsg(ProtoComm::BaseMsg* aTxMsg)
+void ResponderThread::sendMsg(RGB::BaseMsg* aTxMsg)
 {
    mSerialMsgThread->sendMsg(aTxMsg);
    mTxCount++;
@@ -277,7 +299,7 @@ void ResponderThread::sendMsg(ProtoComm::BaseMsg* aTxMsg)
 
 void ResponderThread::sendTestMsg()
 {
-   ProtoComm::TestMsg* tMsg = new ProtoComm::TestMsg;
+   RGB::TestMsg* tMsg = new RGB::TestMsg;
    tMsg->mCode1 = 201;
 
    mSerialMsgThread->sendMsg(tMsg);

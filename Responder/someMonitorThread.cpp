@@ -32,8 +32,8 @@ MonitorThread::MonitorThread()
    mShowCode = 0;
 
    // Bind member variables.
-   ProtoComm::MsgMetrics* tTxMsgMetrics = (ProtoComm::MsgMetrics*)gResponderThread->mMsgMonkey->mTxMsgMetrics;
-   ProtoComm::MsgMetrics* tRxMsgMetrics = (ProtoComm::MsgMetrics*)gResponderThread->mMsgMonkey->mRxMsgMetrics;
+   RGB::MsgMetrics* tTxMsgMetrics = (RGB::MsgMetrics*)gResponderThread->mMsgMonkey->mTxMsgMetrics;
+   RGB::MsgMetrics* tRxMsgMetrics = (RGB::MsgMetrics*)gResponderThread->mMsgMonkey->mRxMsgMetrics;
 
    mMon_TxMsgCount.bind(&tTxMsgMetrics->mMsgCount);
    mMon_TxByteCount.bind(&tTxMsgMetrics->mByteCount);
@@ -63,8 +63,8 @@ void MonitorThread::executeOnTimer(int aTimeCount)
    // Show.
    if (mShowCode == 1)
    {
-      ProtoComm::MsgMetrics* tTxMsgMetrics = (ProtoComm::MsgMetrics*)gResponderThread->mMsgMonkey->mTxMsgMetrics;
-      ProtoComm::MsgMetrics* tRxMsgMetrics = (ProtoComm::MsgMetrics*)gResponderThread->mMsgMonkey->mRxMsgMetrics;
+      RGB::MsgMetrics* tTxMsgMetrics = (RGB::MsgMetrics*)gResponderThread->mMsgMonkey->mTxMsgMetrics;
+      RGB::MsgMetrics* tRxMsgMetrics = (RGB::MsgMetrics*)gResponderThread->mMsgMonkey->mRxMsgMetrics;
 
       Prn::print(Prn::Show1, "TxMsgCount               %-10d  %d",
          mMon_TxMsgCount.mValue, mMon_TxMsgCount.mDelta);
@@ -72,17 +72,19 @@ void MonitorThread::executeOnTimer(int aTimeCount)
          mMon_TxByteCount.mValue, mMon_TxByteCount.mDelta);
 
       Prn::print(Prn::Show1, "TxTestMsgCount           %-10d", tTxMsgMetrics->mTestMsgCount);
-      Prn::print(Prn::Show1, "TxEchoResponseMsgCount   %-10d", tTxMsgMetrics->mEchoResponseMsgCount);
-      Prn::print(Prn::Show1, "TxRunResponseMsgCount    %-10d", tTxMsgMetrics->mRunResponseMsgCount);
-      
+      Prn::print(Prn::Show1, "TxRedResponseMsgCount    %-10d", tTxMsgMetrics->mRedResponseMsgCount);
+      Prn::print(Prn::Show1, "TxGreenResponseMsgCount  %-10d", tTxMsgMetrics->mGreenResponseMsgCount);
+      Prn::print(Prn::Show1, "TxBlueResponseMsgCount   %-10d", tTxMsgMetrics->mBlueResponseMsgCount);
+
       Prn::print(Prn::Show1, "RxMsgCount               %-10d  %d",
          mMon_RxMsgCount.mValue, mMon_RxMsgCount.mDelta);
       Prn::print(Prn::Show1, "RxByteCount              %-10lld  %lld",
          mMon_RxByteCount.mValue, mMon_RxByteCount.mDelta);
 
       Prn::print(Prn::Show1, "RxTestMsgCount           %-10d", tRxMsgMetrics->mTestMsgCount);
-      Prn::print(Prn::Show1, "RxEchoRequestMsgCount    %-10d", tRxMsgMetrics->mEchoRequestMsgCount);
-      Prn::print(Prn::Show1, "RxRunRequestMsgCount     %-10d", tRxMsgMetrics->mRunRequestMsgCount);
+      Prn::print(Prn::Show1, "RxRedRequestMsgCount     %-10d", tRxMsgMetrics->mRedRequestMsgCount);
+      Prn::print(Prn::Show1, "RxGreenRequestMsgCount   %-10d", tRxMsgMetrics->mGreenRequestMsgCount);
+      Prn::print(Prn::Show1, "RxBlueRequestMsgCount    %-10d", tRxMsgMetrics->mBlueRequestMsgCount);
 
       Prn::print(Prn::Show1, "");
    }
@@ -90,8 +92,8 @@ void MonitorThread::executeOnTimer(int aTimeCount)
    // Show.
    if (mShowCode == 2)
    {
-      ProtoComm::MsgMetrics* tTxMsgMetrics = (ProtoComm::MsgMetrics*)gResponderThread->mMsgMonkey->mTxMsgMetrics;
-      ProtoComm::MsgMetrics* tRxMsgMetrics = (ProtoComm::MsgMetrics*)gResponderThread->mMsgMonkey->mRxMsgMetrics;
+      RGB::MsgMetrics* tTxMsgMetrics = (RGB::MsgMetrics*)gResponderThread->mMsgMonkey->mTxMsgMetrics;
+      RGB::MsgMetrics* tRxMsgMetrics = (RGB::MsgMetrics*)gResponderThread->mMsgMonkey->mRxMsgMetrics;
       Ris::SerialMsgPort* tMsgPort = (Ris::SerialMsgPort*)&gResponderThread->mSerialMsgThread->mSerialMsgPort;
 
       Prn::print(Prn::Show1, "TxMsgCount               %-10d  %d",

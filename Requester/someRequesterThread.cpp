@@ -33,7 +33,7 @@ RequesterThread::RequesterThread()
 
    // Initialize member variables.
    mSerialMsgThread = 0;
-   mMsgMonkey = new ProtoComm::MsgMonkey;
+   mMsgMonkey = new RGB::MsgMonkey;
    mConnectionFlag = false;
    mTPCode = 0;
    mRxCount = 0;
@@ -137,13 +137,17 @@ void RequesterThread::executeOnTimer(int aTimerCount)
 {
    if (mTPCode == 1)
    {
-      ProtoComm::EchoRequestMsg* tTxMsg = new ProtoComm::EchoRequestMsg;
-      tTxMsg->initialize(1000);
+      RGB::RedRequestMsg* tTxMsg = new RGB::RedRequestMsg;
       sendMsg(tTxMsg);
    }
    else if (mTPCode == 2)
    {
-      ProtoComm::RunRequestMsg* tTxMsg = new ProtoComm::RunRequestMsg;
+      RGB::GreenRequestMsg* tTxMsg = new RGB::GreenRequestMsg;
+      sendMsg(tTxMsg);
+   }
+   else if (mTPCode == 3)
+   {
+      RGB::BlueRequestMsg* tTxMsg = new RGB::BlueRequestMsg;
       sendMsg(tTxMsg);
    }
 }
@@ -189,20 +193,23 @@ void RequesterThread::executeSession(bool aConnected)
 
 void RequesterThread::executeRxMsg(Ris::ByteContent* aMsg)
 {
-   ProtoComm::BaseMsg* tMsg = (ProtoComm::BaseMsg*)aMsg;
+   RGB::BaseMsg* tMsg = (RGB::BaseMsg*)aMsg;
 
    // Message jump table based on message type.
    // Call corresponding specfic message handler method.
    switch (tMsg->mMessageType)
    {
-   case ProtoComm::MsgIdT::cTestMsg:
-      processRxMsg((ProtoComm::TestMsg*)tMsg);
+   case RGB::MsgIdT::cTestMsg:
+      processRxMsg((RGB::TestMsg*)tMsg);
       break;
-   case ProtoComm::MsgIdT::cEchoResponseMsg:
-      processRxMsg((ProtoComm::EchoResponseMsg*)tMsg);
+   case RGB::MsgIdT::cRedResponseMsg:
+      processRxMsg((RGB::RedResponseMsg*)tMsg);
       break;
-   case ProtoComm::MsgIdT::cRunResponseMsg:
-      processRxMsg((ProtoComm::RunResponseMsg*)tMsg);
+   case RGB::MsgIdT::cGreenResponseMsg:
+      processRxMsg((RGB::GreenResponseMsg*)tMsg);
+      break;
+   case RGB::MsgIdT::cBlueResponseMsg:
+      processRxMsg((RGB::BlueResponseMsg*)tMsg);
       break;
    default:
       Prn::print(Prn::Show1, "RequesterThread::executeServerRxMsg ??? %d", tMsg->mMessageType);
@@ -217,7 +224,7 @@ void RequesterThread::executeRxMsg(Ris::ByteContent* aMsg)
 //******************************************************************************
 // Message handler - TestMsg.
 
-void RequesterThread::processRxMsg(ProtoComm::TestMsg*  aRxMsg)
+void RequesterThread::processRxMsg(RGB::TestMsg*  aRxMsg)
 {
    aRxMsg->show(Prn::Show1);
    delete aRxMsg;
@@ -226,9 +233,9 @@ void RequesterThread::processRxMsg(ProtoComm::TestMsg*  aRxMsg)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Rx message handler - EchoResponseMsg.
+// Rx message handler - RedResponseMsg.
 
-void RequesterThread::processRxMsg(ProtoComm::EchoResponseMsg* aRxMsg)
+void RequesterThread::processRxMsg(RGB::RedResponseMsg* aRxMsg)
 {
    if (mShowCode == 3)
    {
@@ -240,9 +247,23 @@ void RequesterThread::processRxMsg(ProtoComm::EchoResponseMsg* aRxMsg)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Rx message handler - RunResponseMsg.
+// Rx message handler - GreenResponseMsg.
 
-void RequesterThread::processRxMsg(ProtoComm::RunResponseMsg* aRxMsg)
+void RequesterThread::processRxMsg(RGB::GreenResponseMsg* aRxMsg)
+{
+   if (mShowCode == 3)
+   {
+      aRxMsg->show(Prn::Show1);
+   }
+   delete aRxMsg;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Rx message handler - BlueResponseMsg.
+
+void RequesterThread::processRxMsg(RGB::BlueResponseMsg* aRxMsg)
 {
    if (mShowCode == 3)
    {
@@ -256,7 +277,7 @@ void RequesterThread::processRxMsg(ProtoComm::RunResponseMsg* aRxMsg)
 //******************************************************************************
 // Send a message via mSerialMsgThread:
 
-void RequesterThread::sendMsg(ProtoComm::BaseMsg* aTxMsg)
+void RequesterThread::sendMsg(RGB::BaseMsg* aTxMsg)
 {
    mSerialMsgThread->sendMsg(aTxMsg);
    mTxCount++;
@@ -269,7 +290,7 @@ void RequesterThread::sendMsg(ProtoComm::BaseMsg* aTxMsg)
 
 void RequesterThread::sendTestMsg()
 {
-   ProtoComm::TestMsg* tMsg = new ProtoComm::TestMsg;
+   RGB::TestMsg* tMsg = new RGB::TestMsg;
    tMsg->mCode1 = 201;
 
    mSerialMsgThread->sendMsg(tMsg);

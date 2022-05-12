@@ -11,7 +11,7 @@ Serial message prototype thread class.
 #include "risThreadsQCallThread.h"
 #include "risSerialMsgThread.h"
 
-#include "procoMsg.h"
+#include "rgbMsg.h"
 
 //******************************************************************************
 //******************************************************************************
@@ -64,7 +64,7 @@ public:
    Ris::SerialMsgThread*  mSerialMsgThread;
 
    // Message monkey used by mSerialMsgThread.
-   ProtoComm::MsgMonkey* mMsgMonkey;
+   RGB::MsgMonkey* mMsgMonkey;
 
    //***************************************************************************
    //***************************************************************************
@@ -154,9 +154,10 @@ public:
 
    // Receive message handlers. There is one for each message that can 
    // be received.
-   void processRxMsg(ProtoComm::TestMsg*  aMsg);
-   void processRxMsg(ProtoComm::EchoResponseMsg* aMsg);
-   void processRxMsg(ProtoComm::RunResponseMsg* aMsg);
+   void processRxMsg(RGB::TestMsg*  aMsg);
+   void processRxMsg(RGB::RedResponseMsg* aMsg);
+   void processRxMsg(RGB::GreenResponseMsg* aMsg);
+   void processRxMsg(RGB::BlueResponseMsg* aMsg);
 
    //***************************************************************************
    //***************************************************************************
@@ -164,7 +165,7 @@ public:
    // Methods.
 
    // Send a message via mSerialMsgThread:
-   void sendMsg (ProtoComm::BaseMsg* aTxMsg);
+   void sendMsg (RGB::BaseMsg* aTxMsg);
    void sendTestMsg();
 };
 
