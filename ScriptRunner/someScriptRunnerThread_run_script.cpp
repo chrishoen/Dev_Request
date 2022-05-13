@@ -112,23 +112,79 @@ void ScriptRunnerThread::execute(Ris::CmdLineCmd* aCmd)
 
 void ScriptRunnerThread::executeRed(Ris::CmdLineCmd* aCmd)
 {
-   aCmd->setArgDefault(1, 111);
-   int tN = aCmd->argInt(1);
-   Prn::print(0, "RED     %d", tN);
+   Prn::print(0, "executeRed");
+
+   // Set the thread notification mask and flush the message queue.
+   mNotify.setMaskOne("RxMsg", cRxMsgNotifyCode);
+   mRxMsgQueue.flushRead();
+
+   // Send a message to the responder.
+   RGB::RedRequestMsg* tTxMsg = new RGB::RedRequestMsg;
+   mSerialMsgThread->sendMsg(tTxMsg);
+
+   // Wait for the response message notification.
+   mNotify.wait(cRxMsgTimeout);
+
+   // Read the receive message from the message queue and process it.
+   RGB::RedResponseMsg* tRxMsg = (RGB::RedResponseMsg*)mRxMsgQueue.tryRead();
+   if (tRxMsg == 0) throw 888;
+   if (tRxMsg->mMessageType != RGB::MsgIdT::cRedResponseMsg) throw 889;
+
+   Prn::print(0, "executeRed done");
 }
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 
 void ScriptRunnerThread::executeGreen(Ris::CmdLineCmd* aCmd)
 {
-   aCmd->setArgDefault(1, 111);
-   int tN = aCmd->argInt(1);
-   Prn::print(0, "GREEN   %d", tN);
+   Prn::print(0, "executeGreen");
+
+   // Set the thread notification mask and flush the message queue.
+   mNotify.setMaskOne("RxMsg", cRxMsgNotifyCode);
+   mRxMsgQueue.flushRead();
+
+   // Send a message to the responder.
+   RGB::GreenRequestMsg* tTxMsg = new RGB::GreenRequestMsg;
+   mSerialMsgThread->sendMsg(tTxMsg);
+
+   // Wait for the response message notification.
+   mNotify.wait(cRxMsgTimeout);
+
+   // Read the receive message from the message queue and process it.
+   RGB::GreenResponseMsg* tRxMsg = (RGB::GreenResponseMsg*)mRxMsgQueue.tryRead();
+   if (tRxMsg == 0) throw 888;
+   if (tRxMsg->mMessageType != RGB::MsgIdT::cGreenResponseMsg) throw 889;
+
+   Prn::print(0, "executeGreen done");
 }
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 
 void ScriptRunnerThread::executeBlue(Ris::CmdLineCmd* aCmd)
 {
-   aCmd->setArgDefault(1, 111);
-   int tN = aCmd->argInt(1);
-   Prn::print(0, "BLUE    %d", tN);
+   Prn::print(0, "executeBlue");
+
+   // Set the thread notification mask and flush the message queue.
+   mNotify.setMaskOne("RxMsg", cRxMsgNotifyCode);
+   mRxMsgQueue.flushRead();
+
+   // Send a message to the responder.
+   RGB::BlueRequestMsg* tTxMsg = new RGB::BlueRequestMsg;
+   mSerialMsgThread->sendMsg(tTxMsg);
+
+   // Wait for the response message notification.
+   mNotify.wait(cRxMsgTimeout);
+
+   // Read the receive message from the message queue and process it.
+   RGB::BlueResponseMsg* tRxMsg = (RGB::BlueResponseMsg*)mRxMsgQueue.tryRead();
+   if (tRxMsg == 0) throw 888;
+   if (tRxMsg->mMessageType != RGB::MsgIdT::cBlueResponseMsg) throw 889;
+
+   Prn::print(0, "executeBlue done");
 }
 
 //******************************************************************************
