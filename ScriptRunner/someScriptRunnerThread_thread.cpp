@@ -22,7 +22,7 @@ namespace Some
 // Constructor.
 
 ScriptRunnerThread::ScriptRunnerThread()
-   : mGCodeAckNotify(&mNotify, cGCodeAckNotifyCode)
+   : mRxMsgNotify(&mNotify, cRxMsgNotifyCode)
 {
    using namespace std::placeholders;
 

@@ -46,7 +46,7 @@ void ScriptRunnerThread::executeRxMsg(Ris::ByteContent* aMsg)
 {
    RGB::BaseMsg* tMsg = (RGB::BaseMsg*)aMsg;
    delete aMsg;
-   mNotify.notify(cGCodeAckNotifyCode);
+   mNotify.notify(cRxMsgNotifyCode);
 }
 
 //******************************************************************************

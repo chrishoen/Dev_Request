@@ -62,13 +62,13 @@ public:
    // Constants:
 
    // Wait timeouts.
-   static const int cGCodeAckTimeout = -1;
+   static const int cRxMsgTimeout = -1;
    static const int cScriptThrottle = 100;
 
    // Notification codes.
-   static const int cGCodeAckNotifyCode = 11;
+   static const int cRxMsgNotifyCode = 11;
 
-   static const int cFlushGCodeAckNotifyCode = 17;
+   static const int cFlushRxMsgNotifyCode = 17;
 
    // Loop exit status codes.
    static const int cLoopExitNormal = 0;
@@ -96,7 +96,7 @@ public:
    // Members.
 
    // Notifications.
-   Ris::Threads::NotifyWrapper mGCodeAckNotify;
+   Ris::Threads::NotifyWrapper mRxMsgNotify;
 
    //***************************************************************************
    //***************************************************************************

@@ -24,13 +24,13 @@ void ScriptRunnerThread::executeTest1()
       Prn::print(Prn::Show1, "ScriptRunnerThread::executeTest1 BEGIN");
 
       // Set the thread notification mask.
-      mNotify.setMaskOne("GCodeAck", cGCodeAckNotifyCode);
+      mNotify.setMaskOne("RxMsg", cRxMsgNotifyCode);
 
       // Send a message to the responder.
       sendTestMsg();
 
       // Wait for the completion notification.
-      mNotify.wait(cGCodeAckTimeout);
+      mNotify.wait(cRxMsgTimeout);
 
       Prn::print(Prn::Show1, "ScriptRunnerThread::executeTest1 END");
    }
