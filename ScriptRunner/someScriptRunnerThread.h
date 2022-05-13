@@ -1,15 +1,17 @@
 #pragma once
 
 /*==============================================================================
-Serial message prototype thread class.
+Script runner prototype thread class.
 ==============================================================================*/
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 
-#include "risThreadsQCallThread.h"
+#include "risThreadsTwoThread.h"
+#include "risThreadsSynch.h"
 #include "risSerialMsgThread.h"
+#include "risCmdLineScript.h"
 
 #include "rgbMsg.h"
 
@@ -23,36 +25,61 @@ namespace Some
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Serial message prototype thread class. It processes messages that are
-// communicated via a serial channel. The messages follow the byte content
-// binary message scheme.
-//
-// This is a prototype serial thread class. It inherits from BaseQCallThread to
-// obtain a call queue based thread functionality.
-//
-// The prototype thread creates a child serial message thread that establishes
-// and manages a serial connection, receives messages and passes them to the
-// parent via a qcall callback, and allows for the transmission of messages.
-// the child thread also notifies the parent thread of serial connection
-// establishment/disestablishment via a qcall callback.
+// Script runner prototype thread class.
 // 
-// The prototype thread is based on a call queue and it uses qcalls to
-// interface to the child thread. When the child thread detects a session
-// change it invokes the prototypes thread's mSessionQCall, which defers
-// execution of its executeSession member function. Likewise, when the child
-// thread receives a message it invokes the serial thread's mRxMsgQCall, which
-// defers  execution of its executeRxMsg member function. 
+// This is a script runner two thread. It's purpose is to run a script text
+// file that contains instructions to send request messages to a responder
+// program that sends back response messages. For each command instruction,
+// a request message is formulated and send to the responder. It then
+// receives and processes the response messages.
+// 
+// It inherits from BaseTwoThread to obtain a two thread functionality.
 //
-// The child thread provides the execution context for actually managing
-// session changes and receiving messages. The parent thread provides the
-// execution context for processing the session changes and the received 
-// messages.
+// The long thread executes a run script qcall that provides the execution
+// context for the request/response message processing sequence. It reads
+// a command instruction from the script file and executes it to send
+// a request and wait for a notication of the response.
+//
+// This creates a child serial message thread that establishes and manages
+// a serial connection, receives messages and passes them to the parent via
+// a qcall callback, and allows for the transmission of messages. The child
+// thread also notifies the parent thread of serial connection
+// establishment/disestablishment via a qcall callback.
+
+// The short thread executes a receive message qcall that is invoked by the
+// child serial message thread. It notifies the long thread
+// when responses are received.
 //
 
-class  ScriptRunnerThread : public Ris::Threads::BaseQCallThread
+class  ScriptRunnerThread : public Ris::Threads::BaseTwoThread
 {
 public:
-   typedef Ris::Threads::BaseQCallThread BaseClass;
+   typedef Ris::Threads::BaseTwoThread BaseClass;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Constants:
+
+   // Lcd paint settle time.
+   static const int cLcdSettleTime = 50;
+
+   // Wait timeouts.
+   static const int cGCodeAckTimeout = -1;
+   static const int cLcdTimeout = 2000;
+   static const int cScriptThrottle = 100;
+
+   // Notification codes.
+   static const int cGCodeAckNotifyCode = 11;
+   static const int cLcdNotifyCode = 12;
+
+   static const int cFlushGCodeAckNotifyCode = 17;
+   static const int cFlushLcdNotifyCode = 18;
+
+   // Loop exit status codes.
+   static const int cLoopExitNormal = 0;
+   static const int cLoopExitSuspended = 1;
+   static const int cLoopExitAborted = 2;
 
    //***************************************************************************
    //***************************************************************************
@@ -66,19 +93,58 @@ public:
    // Message monkey used by mSerialMsgThread.
    RGB::MsgMonkey* mMsgMonkey;
 
+   // True if the serial connection is valid.
+   bool mConnectionFlag;
+
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
    // Members.
 
-   // True if the serial connection is valid.
-   bool mConnectionFlag;
+   // Notifications.
+   Ris::Threads::NotifyWrapper mLcdNotify;
+   Ris::Threads::NotifyWrapper mGCodeAckNotify;
 
-   // State variables.
-   int mTPCode;
-   int mRxCount;
-   int mTxCount;
-   int mShowCode;
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Members.
+
+   // Run script exit code.
+   int mLoopExitCode;
+
+   // If true then at the next test point script command that is encountered
+   // in the script file the suspend exit flag is set.
+   bool mSuspendRequestFlag;
+
+   // If true then the script qcall loop exits in a suspended state.
+   bool mSuspendExitFlag;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Members.
+
+   // Command line script file reader.
+   Ris::CmdLineScript mScript;
+
+   // Command line command for script reader.
+   Ris::CmdLineCmd mCmd;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Members.
+
+   // If true the execute periodically.
+   bool mTPFlag;
+
+   // Metrics.
+   int  mStatusCount1;
+   int  mStatusCount2;
+
+   // Metrics.
+   int mReadCount;
 
    //***************************************************************************
    //***************************************************************************
@@ -106,7 +172,7 @@ public:
    // Thread shutdown function. This calls the base class shutdownThread
    // function to terminate the thread. This executes in the context of
    // the calling thread.
-   void shutdownThread() override;
+   void shutdownThreads() override;
 
    // Execute periodically. This is called by the base class timer.
    void executeOnTimer(int aTimerCount) override;
@@ -150,14 +216,36 @@ public:
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Methods.
+   // Methods. qcalls.
 
-   // Receive message handlers. There is one for each message that can 
-   // be received.
-   void processRxMsg(RGB::TestMsg*  aMsg);
-   void processRxMsg(RGB::RedResponseMsg* aMsg);
-   void processRxMsg(RGB::GreenResponseMsg* aMsg);
-   void processRxMsg(RGB::BlueResponseMsg* aMsg);
+   // Test qcall. It is invoked by the command line executive.
+   Ris::Threads::QCall0 mTest1QCall;
+
+   // Test function. This is bound to the qcall.
+   void executeTest1();
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods. qcalls.
+
+   // Run script qcall. It is invoked by the command line executive.
+   Ris::Threads::QCall0       mRunScriptQCall;
+
+   // Run script function. This is bound to the qcall. This runs a
+   // script file.
+   // 
+   // This is used for running script files.
+   void executeRunScript();
+
+   // Execute a command line command from the script file. It calls one of
+   // the following specific command execution functions.
+   void execute(Ris::CmdLineCmd* aCmd);
+
+   // Execute specific commands.
+   void executeRed(Ris::CmdLineCmd* aCmd);
+   void executeGreen(Ris::CmdLineCmd* aCmd);
+   void executeBlue(Ris::CmdLineCmd* aCmd);
 
    //***************************************************************************
    //***************************************************************************
@@ -175,7 +263,7 @@ public:
 // Global singular instance.
 
 #ifdef _SOMESCRIPTRUNNERTHREAD_CPP_
-         ScriptRunnerThread* gScriptRunnerThread;
+         ScriptRunnerThread* gScriptRunnerThread = 0;
 #else
 extern   ScriptRunnerThread* gScriptRunnerThread;
 #endif

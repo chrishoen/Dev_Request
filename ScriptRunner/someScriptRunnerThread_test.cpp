@@ -8,23 +8,37 @@ Description:
 
 #include "stdafx.h"
 
-#define  _CMNPRIORITIES_CPP_
-#include "cmnPriorities.h"
+#include "someScriptRunnerThread.h"
 
-namespace Cmn
+namespace Some
 {
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Constructor.
 
-Priorities::Priorities()
+void ScriptRunnerThread::executeTest1()
 {
-   mScriptLong        = Ris::Threads::Priority(-1, 50);
-   mScriptShort       = Ris::Threads::Priority(-1, 60);
-   mSerial            = Ris::Threads::Priority(-1, 70);
-   mMonitor           = Ris::Threads::Priority(-1, 40);
+   try
+   {
+      Prn::print(Prn::View01, "ScriptRunnerThread::executeTest1 BEGIN");
+
+      // Set the thread notification mask.
+      mNotify.setMaskOne("GCodeAck", cGCodeAckNotifyCode);
+
+      // Send a message to the responder.
+      RGB::RedRequestMsg* tTxMsg = new RGB::RedRequestMsg;
+      sendMsg(tTxMsg);
+
+      // Wait for the completion notification.
+      mNotify.wait(cGCodeAckTimeout);
+
+      Prn::print(Prn::View01, "ScriptRunnerThread::executeTest1 END");
+   }
+   catch (int aException)
+   {
+      Prn::print(0, "EXCEPTION ScriptRunnerThread::executeTest1 %d %s", aException, mNotify.mException);
+   }
 }
 
 //******************************************************************************

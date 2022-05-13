@@ -6,6 +6,8 @@
 //******************************************************************************
 #include "stdafx.h"
 
+#include "cmnPriorities.h"
+#include "cmnShare.h"
 #include "someSerialParms.h"
 
 #define  _SOMESCRIPTRUNNERTHREAD_CPP_
@@ -20,25 +22,36 @@ namespace Some
 // Constructor.
 
 ScriptRunnerThread::ScriptRunnerThread()
+   : mGCodeAckNotify(&mNotify, cGCodeAckNotifyCode),
+   mLcdNotify(&mNotify, cLcdNotifyCode)
 {
-   // Set base class variables.
-   BaseClass::setThreadName("ScriptRunner");
-   BaseClass::setThreadPriority(Ris::Threads::gPriorities.mProc);
-   BaseClass::mTimerPeriod = 100;
+   using namespace std::placeholders;
 
-   // Initialize qcalls.
-   mSessionQCall.bind(this, &ScriptRunnerThread::executeSession);
-   mRxMsgQCall.bind   (this,&ScriptRunnerThread::executeRxMsg);
-   mAbortQCall.bind(this, &ScriptRunnerThread::executeAbort);
+   // Set base class thread variables.
+   BaseClass::mShortThread->setThreadName("ScriptShort");
+   BaseClass::mShortThread->setThreadPriority(Cmn::gPriorities.mScriptShort);
+
+   BaseClass::mLongThread->setThreadName("ScriptLong");
+   BaseClass::mLongThread->setThreadPriority(Cmn::gPriorities.mScriptLong);
+
+   // Set base class call pointers.
+   BaseClass::mShortThread->mThreadInitCallPointer = std::bind(&ScriptRunnerThread::threadInitFunction, this);
+   BaseClass::mShortThread->mThreadExitCallPointer = std::bind(&ScriptRunnerThread::threadExitFunction, this);
+   BaseClass::mShortThread->mThreadExecuteOnTimerCallPointer = std::bind(&ScriptRunnerThread::executeOnTimer, this, _1);
+
+   // Bind qcalls.
+   mSessionQCall.bind (this->mShortThread, this, &ScriptRunnerThread::executeSession);
+   mRxMsgQCall.bind   (this->mShortThread, this, &ScriptRunnerThread::executeRxMsg);
+   mAbortQCall.bind   (this->mShortThread, this, &ScriptRunnerThread::executeAbort);
+
+   // Bind qcalls.
+   mTest1QCall.bind(this->mLongThread, this, &ScriptRunnerThread::executeTest1);
+   mRunScriptQCall.bind(this->mLongThread, this, &ScriptRunnerThread::executeRunScript);
 
    // Initialize member variables.
    mSerialMsgThread = 0;
    mMsgMonkey = new RGB::MsgMonkey;
    mConnectionFlag = false;
-   mTPCode = 0;
-   mRxCount = 0;
-   mTxCount = 0;
-   mShowCode = 0;
 }
 
 ScriptRunnerThread::~ScriptRunnerThread()
@@ -119,11 +132,17 @@ void ScriptRunnerThread::threadExitFunction()
 // function to terminate the thread. This executes in the context of
 // the calling thread.
 
-void ScriptRunnerThread::shutdownThread()
+void ScriptRunnerThread::shutdownThreads()
 {
    Trc::write(11, 0, "ScriptRunnerThread::shutdownThread");
    Prn::print(0, "ScriptRunnerThread::shutdownThread BEGIN");
-   BaseClass::shutdownThread();
+
+   // Abort the long thread.
+   BaseClass::mNotify.abort();
+
+   // Shutdown the two threads.
+   BaseClass::shutdownThreads();
+
    Prn::print(0, "ScriptRunnerThread::shutdownThread END");
    Trc::write(11, 0, "ScriptRunnerThread::shutdownThread done");
 }
@@ -135,21 +154,6 @@ void ScriptRunnerThread::shutdownThread()
 
 void ScriptRunnerThread::executeOnTimer(int aTimerCount)
 {
-   if (mTPCode == 1)
-   {
-      RGB::RedRequestMsg* tTxMsg = new RGB::RedRequestMsg;
-      sendMsg(tTxMsg);
-   }
-   else if (mTPCode == 2)
-   {
-      RGB::GreenRequestMsg* tTxMsg = new RGB::GreenRequestMsg;
-      sendMsg(tTxMsg);
-   }
-   else if (mTPCode == 3)
-   {
-      RGB::BlueRequestMsg* tTxMsg = new RGB::BlueRequestMsg;
-      sendMsg(tTxMsg);
-   }
 }
 
 //******************************************************************************
@@ -159,117 +163,10 @@ void ScriptRunnerThread::executeOnTimer(int aTimerCount)
 
 void ScriptRunnerThread::executeAbort()
 {
+   // Abort the long thread.
+   BaseClass::mNotify.abort();
+   // Abort the serial child thread.
    mSerialMsgThread->mSerialMsgPort.doAbort();
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// qcall registered to the mSerialMsgThread child thread. It is invoked
-// when a session is established or disestablished (when the serial port
-// is opened or it is closed because of an error or a disconnection). 
-
-void ScriptRunnerThread::executeSession(bool aConnected)
-{
-   if (aConnected)
-   {
-      Prn::print(Prn::Show1, "ScriptRunnerThread CONNECTED");
-   }
-   else
-   {
-      Prn::print(Prn::Show1, "ScriptRunnerThread DISCONNECTED");
-   }
-
-   mConnectionFlag = aConnected;
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// qcall registered to the mSerialMsgThread child thread. It is invoked by
-// the child thread when a message is received.
-// Based on the receive message type, call one of the specific receive
-// message handlers. This is bound to the qcall.
-
-void ScriptRunnerThread::executeRxMsg(Ris::ByteContent* aMsg)
-{
-   RGB::BaseMsg* tMsg = (RGB::BaseMsg*)aMsg;
-
-   // Message jump table based on message type.
-   // Call corresponding specfic message handler method.
-   switch (tMsg->mMessageType)
-   {
-   case RGB::MsgIdT::cTestMsg:
-      processRxMsg((RGB::TestMsg*)tMsg);
-      break;
-   case RGB::MsgIdT::cRedResponseMsg:
-      processRxMsg((RGB::RedResponseMsg*)tMsg);
-      break;
-   case RGB::MsgIdT::cGreenResponseMsg:
-      processRxMsg((RGB::GreenResponseMsg*)tMsg);
-      break;
-   case RGB::MsgIdT::cBlueResponseMsg:
-      processRxMsg((RGB::BlueResponseMsg*)tMsg);
-      break;
-   default:
-      Prn::print(Prn::Show1, "ScriptRunnerThread::executeServerRxMsg ??? %d", tMsg->mMessageType);
-      delete tMsg;
-      break;
-   }
-   mRxCount++;
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Message handler - TestMsg.
-
-void ScriptRunnerThread::processRxMsg(RGB::TestMsg*  aRxMsg)
-{
-   aRxMsg->show(Prn::Show1);
-   delete aRxMsg;
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Rx message handler - RedResponseMsg.
-
-void ScriptRunnerThread::processRxMsg(RGB::RedResponseMsg* aRxMsg)
-{
-   if (mShowCode == 3)
-   {
-      aRxMsg->show(Prn::Show1);
-   }
-   delete aRxMsg;
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Rx message handler - GreenResponseMsg.
-
-void ScriptRunnerThread::processRxMsg(RGB::GreenResponseMsg* aRxMsg)
-{
-   if (mShowCode == 3)
-   {
-      aRxMsg->show(Prn::Show1);
-   }
-   delete aRxMsg;
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Rx message handler - BlueResponseMsg.
-
-void ScriptRunnerThread::processRxMsg(RGB::BlueResponseMsg* aRxMsg)
-{
-   if (mShowCode == 3)
-   {
-      aRxMsg->show(Prn::Show1);
-   }
-   delete aRxMsg;
 }
 
 //******************************************************************************
@@ -280,7 +177,6 @@ void ScriptRunnerThread::processRxMsg(RGB::BlueResponseMsg* aRxMsg)
 void ScriptRunnerThread::sendMsg(RGB::BaseMsg* aTxMsg)
 {
    mSerialMsgThread->sendMsg(aTxMsg);
-   mTxCount++;
 }
 
 //******************************************************************************

@@ -26,7 +26,6 @@ void CmdLineExec::reset()
 
 void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 {
-   if (aCmd->isCmd("TP"))        Some::gScriptRunnerThread->mTPCode = aCmd->argInt(1);
    if (aCmd->isCmd("SEND"))      executeSend(aCmd);
    if (aCmd->isCmd("ABORT"))     executeAbort(aCmd);
    if (aCmd->isCmd("GO1"))       executeGo1(aCmd);
@@ -42,7 +41,6 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::special(int aSpecial)
 {
-   Some::gScriptRunnerThread->mShowCode = aSpecial;
    Some::gMonitorThread->mShowCode = aSpecial;
 }
 

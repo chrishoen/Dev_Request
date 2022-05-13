@@ -28,7 +28,7 @@ int main(int argc,char** argv)
    // Launch program threads.
 
    Some::gScriptRunnerThread = new Some::ScriptRunnerThread;
-   Some::gScriptRunnerThread->launchThread();
+   Some::gScriptRunnerThread->launchThreads();
 
    Some::gMonitorThread = new Some::MonitorThread;
    Some::gMonitorThread->launchThread();
@@ -60,7 +60,7 @@ int main(int argc,char** argv)
    delete Some::gMonitorThread;
    Some::gMonitorThread = 0;
 
-   Some::gScriptRunnerThread->shutdownThread();
+   Some::gScriptRunnerThread->shutdownThreads();
    delete Some::gScriptRunnerThread;
    Some::gScriptRunnerThread = 0;
 

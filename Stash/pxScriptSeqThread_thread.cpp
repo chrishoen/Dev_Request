@@ -43,8 +43,8 @@ ScriptSeqThread::ScriptSeqThread()
    // Set qcalls.
    mTest1QCall.bind          (this->mLongThread,  this, &ScriptSeqThread::executeTest1);
    mTest2QCall.bind          (this->mLongThread,  this, &ScriptSeqThread::executeTest2);
-   mRunScript1QCall.bind(this->mLongThread, this, &ScriptSeqThread::executeRunScript1);
-   mRunScript2QCall.bind(this->mLongThread, this, &ScriptSeqThread::executeRunScript2);
+   mRunScript1QCall.bind     (this->mLongThread, this, &ScriptSeqThread::executeRunScript1);
+   mRunScript2QCall.bind     (this->mLongThread, this, &ScriptSeqThread::executeRunScript2);
    mAbortScriptQCall.bind    (this->mShortThread, this, &ScriptSeqThread::executeAbortScript);
 
    // Set member variables.
