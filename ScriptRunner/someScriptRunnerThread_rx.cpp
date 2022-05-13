@@ -50,6 +50,8 @@ void ScriptRunnerThread::executeRxMsg(Ris::ByteContent* aRxMsg)
       Prn::print(Prn::Show1, "RxMsgQueue ERROR queue full");
       delete tRxMsg;
    }
+   Trc::write(1, 0, "executeRxMsg %d", tRxMsg->mMessageType);
+
    // Notify the long thread.
    mNotify.notify(cRxMsgNotifyCode);
 }

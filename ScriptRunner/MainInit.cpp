@@ -49,7 +49,7 @@ void main_initialize(int argc,char** argv)
    // Initialize trace facility.
 
    Trc::reset();
-   Trc::create_buffer(1,  3, "message");
+   Trc::create_buffer(1,  3, "script");
    Trc::create_buffer(11, 3, "serial");
    Trc::set_default_trace_index(11);
    //Trc::create_log(11, 4, "log/ProtoSerial_trace11.log");

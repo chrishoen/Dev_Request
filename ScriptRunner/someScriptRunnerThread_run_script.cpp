@@ -23,6 +23,9 @@ void ScriptRunnerThread::executeRunScript()
    Prn::print(0, "");
    Prn::print(0, "running script");
    Prn::print(Prn::Show1, "ScriptSeqThread::executeRunScript BEGIN");
+   // Trace.
+   Trc::start(1);
+   Trc::write(1, 0, "executeRunScript BEGIN");
 
    // Initialize variables.
    mLoopExitCode = 0;
@@ -62,6 +65,7 @@ void ScriptRunnerThread::executeRunScript()
    {
       mLoopExitCode = cLoopExitAborted;
       Prn::print(0, "EXCEPTION ScriptSeqThread::executeRunScript %d %s", aException, mNotify.mException);
+      Trc::write(1, 0, "EXCEPTION ScriptSeqThread::executeRunScript %d %s", aException, mNotify.mException);
    }
 
    // Test the exit code.
@@ -70,6 +74,7 @@ void ScriptRunnerThread::executeRunScript()
       // Print and log.
       Prn::print(0, "script done");
       Prn::print(0, "");
+      Trc::write(1, 0, "script done");
 
       // Set the state and send a message to the controller.
       gState.setStateSX2_Done();
@@ -82,6 +87,7 @@ void ScriptRunnerThread::executeRunScript()
       // Print and log.
       Prn::print(0, "script aborted");
       Prn::print(0, "");
+      Trc::write(1, 0, "script aborted");
 
       // Set the state and send a message to the controller.
       gState.setStateSX2_Aborted();
@@ -91,6 +97,7 @@ void ScriptRunnerThread::executeRunScript()
    mScript.doClose();
 
    Prn::print(Prn::Show1, "ScriptSeqThread::executeRunScript END");
+   Trc::write(1, 0, "executeRunScript END");
 }
 
 //******************************************************************************
@@ -112,7 +119,7 @@ void ScriptRunnerThread::execute(Ris::CmdLineCmd* aCmd)
 
 void ScriptRunnerThread::executeRed(Ris::CmdLineCmd* aCmd)
 {
-   Prn::print(Prn::Show4, "executeRed");
+   Trc::write(1, 0, "executeRed");
 
    // Set the thread notification mask and flush the message queue.
    mNotify.setMaskOne("RxMsg", cRxMsgNotifyCode);
@@ -130,7 +137,7 @@ void ScriptRunnerThread::executeRed(Ris::CmdLineCmd* aCmd)
    if (tRxMsg == 0) throw 888;
    if (tRxMsg->mMessageType != RGB::MsgIdT::cRedResponseMsg) throw 889;
 
-   Prn::print(Prn::Show4, "executeRed done");
+   Trc::write(1, 0, "executeRed done");
 }
 
 //******************************************************************************
@@ -139,7 +146,7 @@ void ScriptRunnerThread::executeRed(Ris::CmdLineCmd* aCmd)
 
 void ScriptRunnerThread::executeGreen(Ris::CmdLineCmd* aCmd)
 {
-   Prn::print(Prn::Show4, "executeGreen");
+   Trc::write(1, 0, "executeGreen");
 
    // Set the thread notification mask and flush the message queue.
    mNotify.setMaskOne("RxMsg", cRxMsgNotifyCode);
@@ -157,7 +164,7 @@ void ScriptRunnerThread::executeGreen(Ris::CmdLineCmd* aCmd)
    if (tRxMsg == 0) throw 888;
    if (tRxMsg->mMessageType != RGB::MsgIdT::cGreenResponseMsg) throw 889;
 
-   Prn::print(Prn::Show4, "executeGreen done");
+   Trc::write(1, 0, "executeGreen done");
 }
 
 //******************************************************************************
@@ -166,7 +173,7 @@ void ScriptRunnerThread::executeGreen(Ris::CmdLineCmd* aCmd)
 
 void ScriptRunnerThread::executeBlue(Ris::CmdLineCmd* aCmd)
 {
-   Prn::print(Prn::Show4, "executeBlue");
+   Trc::write(1, 0, "executeBlue");
 
    // Set the thread notification mask and flush the message queue.
    mNotify.setMaskOne("RxMsg", cRxMsgNotifyCode);
@@ -184,7 +191,7 @@ void ScriptRunnerThread::executeBlue(Ris::CmdLineCmd* aCmd)
    if (tRxMsg == 0) throw 888;
    if (tRxMsg->mMessageType != RGB::MsgIdT::cBlueResponseMsg) throw 889;
 
-   Prn::print(Prn::Show4, "executeBlue done");
+   Trc::write(1, 0, "executeBlue done");
 }
 
 //******************************************************************************
