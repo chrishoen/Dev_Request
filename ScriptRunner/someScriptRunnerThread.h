@@ -61,20 +61,14 @@ public:
    //***************************************************************************
    // Constants:
 
-   // Lcd paint settle time.
-   static const int cLcdSettleTime = 50;
-
    // Wait timeouts.
    static const int cGCodeAckTimeout = -1;
-   static const int cLcdTimeout = 2000;
    static const int cScriptThrottle = 100;
 
    // Notification codes.
    static const int cGCodeAckNotifyCode = 11;
-   static const int cLcdNotifyCode = 12;
 
    static const int cFlushGCodeAckNotifyCode = 17;
-   static const int cFlushLcdNotifyCode = 18;
 
    // Loop exit status codes.
    static const int cLoopExitNormal = 0;
@@ -102,7 +96,6 @@ public:
    // Members.
 
    // Notifications.
-   Ris::Threads::NotifyWrapper mLcdNotify;
    Ris::Threads::NotifyWrapper mGCodeAckNotify;
 
    //***************************************************************************
