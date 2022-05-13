@@ -37,15 +37,20 @@ void ScriptRunnerThread::executeSession(bool aConnected)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// qcall registered to the mSerialMsgThread child thread. It is invoked by
-// the child thread when a message is received.
-// Based on the receive message type, call one of the specific receive
-// message handlers. This is bound to the qcall.
+// This is bound to the qcall. Write the received message to the message
+// queue and notify the long thread, which will then process the message.
 
-void ScriptRunnerThread::executeRxMsg(Ris::ByteContent* aMsg)
+void ScriptRunnerThread::executeRxMsg(Ris::ByteContent* aRxMsg)
 {
-   RGB::BaseMsg* tMsg = (RGB::BaseMsg*)aMsg;
-   delete aMsg;
+   // Try to write the received message to the message queue.
+   // It will be processed by the long thread.
+   RGB::BaseMsg* tRxMsg = (RGB::BaseMsg*)aRxMsg;
+   if (!mRxMsgQueue.tryWrite(tRxMsg))
+   {
+      Prn::print(Prn::Show1, "RxMsgQueue ERROR queue full");
+      delete tRxMsg;
+   }
+   // Notify the long thread.
    mNotify.notify(cRxMsgNotifyCode);
 }
 

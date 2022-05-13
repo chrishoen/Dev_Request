@@ -12,6 +12,7 @@ Script runner prototype thread class.
 #include "risThreadsSynch.h"
 #include "risSerialMsgThread.h"
 #include "risCmdLineScript.h"
+#include "risSRSWPointerQueue.h"
 
 #include "rgbMsg.h"
 
@@ -98,6 +99,11 @@ public:
    // Notifications.
    Ris::Threads::NotifyWrapper mRxMsgNotify;
 
+   // Receive message queue. This is written with a pointer to a message
+   // when it is received by the receive message qcall. It is read by the
+   // run script qcall.
+   Ris::SRSWPointerQueue<RGB::BaseMsg*, 10> mRxMsgQueue;
+
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
@@ -183,16 +189,16 @@ public:
    // is opened or it is closed because of an error or a disconnection). 
    Ris::SerialMsgThread::SessionQCall mSessionQCall;
 
-   // Maintain session state variables. This is bound to the qcall.
+   // This is bound to the qcall. Maintain session state variables. 
    void executeSession(bool aConnected);
 
    // qcall registered to the mSerialMsgThread child thread. It is invoked by
-   // the child thread when a message is received.
+   // the serial child thread when a message is received.
    Ris::SerialMsgThread::RxMsgQCall mRxMsgQCall;
 
-   // Based on the receive message type, call one of the specific receive
-   // message handlers. This is bound to the qcall.
-   void executeRxMsg(Ris::ByteContent* aMsg);
+   // This is bound to the qcall. Write the received message to the message
+   // queue and notify the long thread, which will then process the message.
+   void executeRxMsg(Ris::ByteContent* aRxMsg);
 
    //***************************************************************************
    //***************************************************************************
