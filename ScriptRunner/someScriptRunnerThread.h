@@ -205,12 +205,13 @@ public:
    //***************************************************************************
    // Methods. qcalls.
 
-   // Abort qcall. It is invoked by the control thread to execute a
-   // an abort in the context of this thread.
-   Ris::Threads::QCall0 mAbortQCall;
+   // Abort script qcall. It is invoked by the control thread to execute an
+   // abort script in the context of this thread.
+   Ris::Threads::QCall0 mAbortScriptQCall;
 
-   // Abort function. This is bound to the qcall. It aborts the serial port.
-   void executeAbort();
+   // This is bound to the qcall. It notifies the long thread to abort
+   // any running script.
+   void executeAbortScript();
 
    //***************************************************************************
    //***************************************************************************

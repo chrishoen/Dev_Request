@@ -34,18 +34,21 @@ ScriptRunnerThread::ScriptRunnerThread()
    BaseClass::mLongThread->setThreadPriority(Cmn::gPriorities.mScriptLong);
 
    // Set base class call pointers.
-   BaseClass::mShortThread->mThreadInitCallPointer = std::bind(&ScriptRunnerThread::threadInitFunction, this);
-   BaseClass::mShortThread->mThreadExitCallPointer = std::bind(&ScriptRunnerThread::threadExitFunction, this);
-   BaseClass::mShortThread->mThreadExecuteOnTimerCallPointer = std::bind(&ScriptRunnerThread::executeOnTimer, this, _1);
+   BaseClass::mShortThread->mThreadInitCallPointer = 
+      std::bind(&ScriptRunnerThread::threadInitFunction, this);
+   BaseClass::mShortThread->mThreadExitCallPointer = 
+      std::bind(&ScriptRunnerThread::threadExitFunction, this);
+   BaseClass::mShortThread->mThreadExecuteOnTimerCallPointer = 
+      std::bind(&ScriptRunnerThread::executeOnTimer, this, _1);
 
    // Bind qcalls.
-   mSessionQCall.bind (this->mShortThread, this, &ScriptRunnerThread::executeSession);
-   mRxMsgQCall.bind   (this->mShortThread, this, &ScriptRunnerThread::executeRxMsg);
-   mAbortQCall.bind   (this->mShortThread, this, &ScriptRunnerThread::executeAbort);
+   mSessionQCall.bind      (this->mShortThread, this, &ScriptRunnerThread::executeSession);
+   mRxMsgQCall.bind        (this->mShortThread, this, &ScriptRunnerThread::executeRxMsg);
+   mAbortScriptQCall.bind  (this->mShortThread, this, &ScriptRunnerThread::executeAbortScript);
 
    // Bind qcalls.
-   mTest1QCall.bind(this->mLongThread, this, &ScriptRunnerThread::executeTest1);
-   mRunScriptQCall.bind(this->mLongThread, this, &ScriptRunnerThread::executeRunScript);
+   mTest1QCall.bind        (this->mLongThread, this, &ScriptRunnerThread::executeTest1);
+   mRunScriptQCall.bind    (this->mLongThread, this, &ScriptRunnerThread::executeRunScript);
 
    // Initialize member variables.
    mSerialMsgThread = 0;
@@ -158,15 +161,13 @@ void ScriptRunnerThread::executeOnTimer(int aTimerCount)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Abort function. This is bound to the qcall. It aborts the serial port.
+// This is bound to the qcall. It notifies the long thread to abort
+// any running script.
 
-void ScriptRunnerThread::executeAbort()
+void ScriptRunnerThread::executeAbortScript()
 {
-   // Abort the long thread.
+   // Notify the the long thread to abort any running script.
    BaseClass::mNotify.abort();
-   return;
-   // Abort the serial child thread.
-   mSerialMsgThread->mSerialMsgPort.doAbort();
 }
 
 //******************************************************************************
