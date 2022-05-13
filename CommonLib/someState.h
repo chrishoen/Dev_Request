@@ -11,7 +11,7 @@
 #include <ctime>
 #include <time.h>
 
-namespace Cmn
+namespace Some
 {
 
 //******************************************************************************
@@ -20,7 +20,7 @@ namespace Cmn
 // This class implements a general purpose shared storage object. It contains
 // status counters and flags.
 
-class Share
+class State
 {
 public:
    //***************************************************************************
@@ -118,7 +118,7 @@ public:
    // Methods:
 
    // Constructor.
-   Share();
+   State();
    void reset();
 
    //***************************************************************************
@@ -222,10 +222,10 @@ public:
 //******************************************************************************
 // Global instance
 
-#ifdef _CMNSHARE_CPP_
-          Share gShare;
+#ifdef _SOMESTATE_CPP_
+          State gState;
 #else
-   extern Share gShare;
+   extern State gState;
 #endif
 
 //******************************************************************************

@@ -6,7 +6,7 @@
 //******************************************************************************
 #include "stdafx.h"
 
-#include "cmnShare.h"
+#include "someState.h"
 
 #include "someScriptRunnerThread.h"
 
@@ -26,15 +26,15 @@ void ScriptRunnerThread::executeRunScript()
 
    // Initialize variables.
    mLoopExitCode = 0;
-   Cmn::gShare.setStateSX2_Running();
-   Cmn::gShare.initializeTime2();
+   gState.setStateSX2_Running();
+   gState.initializeTime2();
 
    // Open the script file.
    mReadCount = 0;
    if (!mScript.doOpen("files/script_rgb.txt")) throw 991;
 
    // Set the state and send a message to the controller.
-   Cmn::gShare.setStateSX2_Running();
+   gState.setStateSX2_Running();
 
    try
    {
@@ -72,10 +72,10 @@ void ScriptRunnerThread::executeRunScript()
       Prn::print(0, "");
 
       // Set the state and send a message to the controller.
-      Cmn::gShare.setStateSX2_Done();
+      gState.setStateSX2_Done();
 
       // Set the state and send a message to the controller.
-      Cmn::gShare.setStateSX2_None();
+      gState.setStateSX2_None();
    }
    else if (mLoopExitCode == cLoopExitAborted)
    {
@@ -84,7 +84,7 @@ void ScriptRunnerThread::executeRunScript()
       Prn::print(0, "");
 
       // Set the state and send a message to the controller.
-      Cmn::gShare.setStateSX2_Aborted();
+      gState.setStateSX2_Aborted();
    }
 
    // Close the script file.

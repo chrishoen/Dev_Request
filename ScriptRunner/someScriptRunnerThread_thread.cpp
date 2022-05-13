@@ -7,7 +7,7 @@
 #include "stdafx.h"
 
 #include "cmnPriorities.h"
-#include "cmnShare.h"
+#include "someState.h"
 #include "someSerialParms.h"
 
 #define  _SOMESCRIPTRUNNERTHREAD_CPP_

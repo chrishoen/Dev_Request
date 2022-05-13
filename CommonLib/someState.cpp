@@ -7,10 +7,10 @@ Description:
 //******************************************************************************
 #include "stdafx.h"
 
-#define  _CMNSHARE_CPP_
-#include "cmnShare.h"
+#define  _SOMESTATE_CPP_
+#include "someState.h"
 
-namespace Cmn
+namespace Some
 {
 
 //******************************************************************************
@@ -18,12 +18,12 @@ namespace Cmn
 //******************************************************************************
 // Constructor
 
-Share::Share()
+State::State()
 {
    reset();
 }
 
-void Share::reset()
+void State::reset()
 {
    mSX1 = cState_None;
    mSX2 = cState_None;
@@ -59,7 +59,7 @@ void Share::reset()
 //******************************************************************************
 // Return the state as a string.
 
-const char* Share::asString_StateSX1()
+const char* State::asString_StateSX1()
 {
    switch (mSX1)
    {
@@ -76,7 +76,7 @@ const char* Share::asString_StateSX1()
    }
 }
 
-const char* Share::asString_StateSX2()
+const char* State::asString_StateSX2()
 {
    switch (mSX2)
    {
@@ -91,7 +91,7 @@ const char* Share::asString_StateSX2()
    }
 }
 
-const char* Share::asString_StateGX()
+const char* State::asString_StateGX()
 {
    switch (mGX)
    {
@@ -101,7 +101,7 @@ const char* Share::asString_StateGX()
    }
 }
 
-const char* Share::asString_StateLX()
+const char* State::asString_StateLX()
 {
    switch (mLX)
    {
@@ -116,43 +116,43 @@ const char* Share::asString_StateLX()
 //******************************************************************************
 // Set state variables.
 
-void Share::setStateSX1_None()
+void State::setStateSX1_None()
 { 
    mSX1 = cState_None;
 }
-void Share::setStateSX1_Starting()
+void State::setStateSX1_Starting()
 { 
    mSX1 = cState_Starting;
 }
-void Share::setStateSX1_Running()
+void State::setStateSX1_Running()
 { 
    mSX1 = cState_Running;
 }
-void Share::setStateSX1_Suspending()
+void State::setStateSX1_Suspending()
 { 
    mSX1 = cState_Suspending;
 }
-void Share::setStateSX1_Suspended()  
+void State::setStateSX1_Suspended()  
 { 
    mSX1 = cState_Suspended;
 }
-void Share::setStateSX1_Aborting()
+void State::setStateSX1_Aborting()
 { 
    mSX1 = cState_Aborting;
 }
-void Share::setStateSX1_Aborted()
+void State::setStateSX1_Aborted()
 { 
    mSX1 = cState_Aborted;
    mGX = cState_None;
    mLX = cState_None;
 }
-void Share::setStateSX1_Done()
+void State::setStateSX1_Done()
 { 
    mSX1 = cState_Done;
    mGX = cState_None;
    mLX = cState_None;
 }
-void Share::setStateSX1_Error()
+void State::setStateSX1_Error()
 { 
    mSX1 = cState_Error;
 }
@@ -162,35 +162,35 @@ void Share::setStateSX1_Error()
 //******************************************************************************
 // Set state variables.
 
-void Share::setStateSX2_None()
+void State::setStateSX2_None()
 {
    mSX2 = cState_None;
 }
-void Share::setStateSX2_Starting()
+void State::setStateSX2_Starting()
 {
    mSX2 = cState_Starting;
 }
-void Share::setStateSX2_Running()
+void State::setStateSX2_Running()
 {
    mSX2 = cState_Running;
 }
-void Share::setStateSX2_Aborting()
+void State::setStateSX2_Aborting()
 {
    mSX2 = cState_Aborting;
 }
-void Share::setStateSX2_Aborted()
+void State::setStateSX2_Aborted()
 {
    mSX2 = cState_Aborted;
    mGX = cState_None;
    mLX = cState_None;
 }
-void Share::setStateSX2_Done()
+void State::setStateSX2_Done()
 {
    mSX2 = cState_Done;
    mGX = cState_None;
    mLX = cState_None;
 }
-void Share::setStateSX2_Error()
+void State::setStateSX2_Error()
 {
    mSX2 = cState_Error;
 }
@@ -200,11 +200,11 @@ void Share::setStateSX2_Error()
 //******************************************************************************
 // Set state variables.
 
-void Share::setStateGX_None()
+void State::setStateGX_None()
 {
    mGX = cState_None;
 }
-void Share::setStateGX_Running()
+void State::setStateGX_Running()
 {
    mGX = cState_Running;
 }
@@ -214,11 +214,11 @@ void Share::setStateGX_Running()
 //******************************************************************************
 // Set state variables.
 
-void Share::setStateLX_None()
+void State::setStateLX_None()
 {
    mLX = cState_None;
 }
-void Share::setStateLX_Running()
+void State::setStateLX_Running()
 {
    mLX = cState_Running;
 }
@@ -228,17 +228,17 @@ void Share::setStateLX_Running()
 //******************************************************************************
 // Get state variables.
 
-bool Share::isStateSX1_None()       { return mSX1 == cState_None; }
-bool Share::isStateSX1_Starting()   { return mSX1 == cState_Starting; }
-bool Share::isStateSX1_Running()    { return mSX1 == cState_Running; }
-bool Share::isStateSX1_Suspending() { return mSX1 == cState_Suspending; }
-bool Share::isStateSX1_Suspended()  { return mSX1 == cState_Suspended; }
-bool Share::isStateSX1_Aborting()   { return mSX1 == cState_Aborting; }
-bool Share::isStateSX1_Aborted()    { return mSX1 == cState_Aborted; }
-bool Share::isStateSX1_Done()       { return mSX1 == cState_Done; }
-bool Share::isStateSX1_Error()      { return mSX1 == cState_Error; }
+bool State::isStateSX1_None()       { return mSX1 == cState_None; }
+bool State::isStateSX1_Starting()   { return mSX1 == cState_Starting; }
+bool State::isStateSX1_Running()    { return mSX1 == cState_Running; }
+bool State::isStateSX1_Suspending() { return mSX1 == cState_Suspending; }
+bool State::isStateSX1_Suspended()  { return mSX1 == cState_Suspended; }
+bool State::isStateSX1_Aborting()   { return mSX1 == cState_Aborting; }
+bool State::isStateSX1_Aborted()    { return mSX1 == cState_Aborted; }
+bool State::isStateSX1_Done()       { return mSX1 == cState_Done; }
+bool State::isStateSX1_Error()      { return mSX1 == cState_Error; }
 
-bool Share::isStateSX1_Busy()
+bool State::isStateSX1_Busy()
 {
    switch (mSX1)
    {
@@ -260,15 +260,15 @@ bool Share::isStateSX1_Busy()
 //******************************************************************************
 // Get state variables.
 
-bool Share::isStateSX2_None()       { return mSX2 == cState_None; }
-bool Share::isStateSX2_Starting()   { return mSX2 == cState_Starting; }
-bool Share::isStateSX2_Running()    { return mSX2 == cState_Running; }
-bool Share::isStateSX2_Aborting()   { return mSX2 == cState_Aborting; }
-bool Share::isStateSX2_Aborted()    { return mSX2 == cState_Aborted; }
-bool Share::isStateSX2_Done()       { return mSX2 == cState_Done; }
-bool Share::isStateSX2_Error()      { return mSX2 == cState_Error; }
+bool State::isStateSX2_None()       { return mSX2 == cState_None; }
+bool State::isStateSX2_Starting()   { return mSX2 == cState_Starting; }
+bool State::isStateSX2_Running()    { return mSX2 == cState_Running; }
+bool State::isStateSX2_Aborting()   { return mSX2 == cState_Aborting; }
+bool State::isStateSX2_Aborted()    { return mSX2 == cState_Aborted; }
+bool State::isStateSX2_Done()       { return mSX2 == cState_Done; }
+bool State::isStateSX2_Error()      { return mSX2 == cState_Error; }
 
-bool Share::isStateSX2_Busy()
+bool State::isStateSX2_Busy()
 {
    switch (mSX2)
    {
@@ -288,23 +288,23 @@ bool Share::isStateSX2_Busy()
 //******************************************************************************
 // Get state variables.
 
-bool Share::isStateGX_None()       { return mGX == cState_None; }
-bool Share::isStateGX_Running()    { return mGX == cState_Running; }
+bool State::isStateGX_None()       { return mGX == cState_None; }
+bool State::isStateGX_Running()    { return mGX == cState_Running; }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 // Get state variables.
 
-bool Share::isStateLX_None()       { return mLX == cState_None; }
-bool Share::isStateLX_Running()    { return mLX == cState_Running; }
+bool State::isStateLX_None()       { return mLX == cState_None; }
+bool State::isStateLX_Running()    { return mLX == cState_Running; }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 // Update the script run time.
 
-void Share::initializeTime1()
+void State::initializeTime1()
 {
    // Initialize counts.
    mGCodeTxCount1 = 0;
@@ -318,7 +318,7 @@ void Share::initializeTime1()
    memset(&mRunTime1, 0, sizeof(mRunTime1));
 }
 
-void Share::initializeTime2()
+void State::initializeTime2()
 {
    // Initialize counts.
    mGCodeTxCount2 = 0;
@@ -348,7 +348,7 @@ void my_timespec_diff(struct timespec *start, struct timespec *stop, struct time
    }
 }
 
-void Share::updateTime()
+void State::updateTime()
 {
    // Get the current time.
    timespec_get(&mCurrentTime, TIME_UTC);
@@ -371,7 +371,7 @@ void Share::updateTime()
 //******************************************************************************
 // Return the script run time as a string.
 
-char* Share::asString_RunTime1(char* aBuffer)
+char* State::asString_RunTime1(char* aBuffer)
 {
    // Calculate the script run time.
    int tTotalSec  = (int)mRunTime1.tv_sec;
@@ -385,7 +385,7 @@ char* Share::asString_RunTime1(char* aBuffer)
    return aBuffer;
 }
 
-char* Share::asString_RunTime2(char* aBuffer)
+char* State::asString_RunTime2(char* aBuffer)
 {
    // Calculate the script run time.
    int tTotalSec = (int)mRunTime2.tv_sec;
@@ -404,22 +404,22 @@ char* Share::asString_RunTime2(char* aBuffer)
 //******************************************************************************
 // Return progress indicators. Return -1 if not valid.
 
-double Share::getProgress1()
+double State::getProgress1()
 {
    // Calculate progress.
    double tProgress = 0.0;
-   if ((isStateSX1_Running() || isStateSX1_Suspended()) && Cmn::gShare.mGCodeTxTotal1 > 0)
+   if ((isStateSX1_Running() || isStateSX1_Suspended()) && gState.mGCodeTxTotal1 > 0)
    {
       tProgress = 100.0 * (double)mGCodeTxCount1 / (double)mGCodeTxTotal1;
    }
    return tProgress;
 }
 
-double Share::getProgress2()
+double State::getProgress2()
 {
    // Calculate progress.
    double tProgress = 0.0;
-   if (isStateSX2_Running() && Cmn::gShare.mGCodeTxTotal2 > 0)
+   if (isStateSX2_Running() && gState.mGCodeTxTotal2 > 0)
    {
       tProgress = 100.0 * (double)mGCodeTxCount2 / (double)mGCodeTxTotal2;
    }
@@ -431,7 +431,7 @@ double Share::getProgress2()
 //******************************************************************************
 // 
 
-void Share::setAStopCode(const char* aString)
+void State::setAStopCode(const char* aString)
 {
    if (strcmp(aString, "AStopEnable") == 0)
    {

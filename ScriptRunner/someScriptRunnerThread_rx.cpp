@@ -6,7 +6,7 @@
 //******************************************************************************
 #include "stdafx.h"
 
-#include "cmnShare.h"
+#include "someState.h"
 
 #include "someScriptRunnerThread.h"
 
