@@ -116,7 +116,7 @@ void ScriptRunnerThread::executeRed(Ris::CmdLineCmd* aCmd)
 
    // Set the thread notification mask and flush the message queue.
    mNotify.setMaskOne("RxMsg", cRxMsgNotifyCode);
-   mRxMsgQueue.flushRead();
+   flushRxMsgQueue();
 
    // Send a message to the responder.
    RGB::RedRequestMsg* tTxMsg = new RGB::RedRequestMsg;
@@ -143,7 +143,7 @@ void ScriptRunnerThread::executeGreen(Ris::CmdLineCmd* aCmd)
 
    // Set the thread notification mask and flush the message queue.
    mNotify.setMaskOne("RxMsg", cRxMsgNotifyCode);
-   mRxMsgQueue.flushRead();
+   flushRxMsgQueue();
 
    // Send a message to the responder.
    RGB::GreenRequestMsg* tTxMsg = new RGB::GreenRequestMsg;
@@ -170,7 +170,7 @@ void ScriptRunnerThread::executeBlue(Ris::CmdLineCmd* aCmd)
 
    // Set the thread notification mask and flush the message queue.
    mNotify.setMaskOne("RxMsg", cRxMsgNotifyCode);
-   mRxMsgQueue.flushRead();
+   flushRxMsgQueue();
 
    // Send a message to the responder.
    RGB::BlueRequestMsg* tTxMsg = new RGB::BlueRequestMsg;

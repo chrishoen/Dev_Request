@@ -26,7 +26,7 @@ void CmdLineExec::reset()
 
 void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 {
-   if (aCmd->isCmd("TP"))        Some::gResponderThread->mTPCode = aCmd->argInt(1);
+   if (aCmd->isCmd("TP"))        Some::gResponderThread->mTPFlag = aCmd->argBool(1);
    if (aCmd->isCmd("SEND"))      executeSend(aCmd);
    if (aCmd->isCmd("A"))         executeAbort(aCmd);
    if (aCmd->isCmd("GO1"))       executeGo1(aCmd);

@@ -26,13 +26,13 @@ void ScriptRunnerThread::executeTest1()
 
       // Set the thread notification mask and flush the message queue.
       mNotify.setMaskOne("RxMsg", cRxMsgNotifyCode);
-      mRxMsgQueue.flushRead();
+      flushRxMsgQueue();
 
       // Send a message to the responder.
       sendTestMsg();
 
       // Wait for the response message notification.
-      mNotify.wait(cRxMsgTimeout);
+      mNotify.wait(cNoTimeout);
 
       // Read the receive message from the message queue and process it.
       RGB::TestMsg* tRxMsg = (RGB::TestMsg*)mRxMsgQueue.tryRead();

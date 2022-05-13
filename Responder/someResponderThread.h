@@ -75,7 +75,7 @@ public:
    bool mConnectionFlag;
 
    // State variables.
-   int mTPCode;
+   int mTPFlag;
    int mRxCount;
    int mTxCount;
    int mShowCode;

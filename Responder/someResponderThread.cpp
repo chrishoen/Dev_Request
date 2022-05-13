@@ -35,7 +35,7 @@ ResponderThread::ResponderThread()
    mSerialMsgThread = 0;
    mMsgMonkey = new RGB::MsgMonkey;
    mConnectionFlag = false;
-   mTPCode = 0;
+   mTPFlag = true;
    mRxCount = 0;
    mTxCount = 0;
    mShowCode = 0;
@@ -135,12 +135,6 @@ void ResponderThread::shutdownThread()
 
 void ResponderThread::executeOnTimer(int aTimerCount)
 {
-   if (mTPCode == 1)
-   {
-      RGB::TestMsg* tTxMsg = new RGB::TestMsg;
-      tTxMsg->mCode1 = aTimerCount;
-      sendMsg(tTxMsg);
-   }
 }
 
 //******************************************************************************
@@ -182,29 +176,36 @@ void ResponderThread::executeSession(bool aConnected)
 // Based on the receive message type, call one of the specific receive
 // message handlers. This is bound to the qcall.
 
-void ResponderThread::executeRxMsg(Ris::ByteContent* aMsg)
+void ResponderThread::executeRxMsg(Ris::ByteContent* aRxMsg)
 {
-   RGB::BaseMsg* tMsg = (RGB::BaseMsg*)aMsg;
+   RGB::BaseMsg* tRxMsg = (RGB::BaseMsg*)aRxMsg;
+
+   // Test flag to ignore messages.
+   if (!mTPFlag)
+   {
+      delete tRxMsg;
+      return;
+   }
 
    // Message jump table based on message type.
    // Call corresponding specfic message handler method.
-   switch (tMsg->mMessageType)
+   switch (tRxMsg->mMessageType)
    {
    case RGB::MsgIdT::cTestMsg:
-      processRxMsg((RGB::TestMsg*)tMsg);
+      processRxMsg((RGB::TestMsg*)tRxMsg);
       break;
    case RGB::MsgIdT::cRedRequestMsg:
-      processRxMsg((RGB::RedRequestMsg*)tMsg);
+      processRxMsg((RGB::RedRequestMsg*)tRxMsg);
       break;
    case RGB::MsgIdT::cGreenRequestMsg:
-      processRxMsg((RGB::GreenRequestMsg*)tMsg);
+      processRxMsg((RGB::GreenRequestMsg*)tRxMsg);
       break;
    case RGB::MsgIdT::cBlueRequestMsg:
-      processRxMsg((RGB::BlueRequestMsg*)tMsg);
+      processRxMsg((RGB::BlueRequestMsg*)tRxMsg);
       break;
    default:
-      Prn::print(Prn::Show1, "ResponderThread::executeServerRxMsg ??? %d", tMsg->mMessageType);
-      delete tMsg;
+      Prn::print(Prn::Show1, "ResponderThread::executeServerRxMsg ??? %d", tRxMsg->mMessageType);
+      delete tRxMsg;
       break;
    }
    mRxCount++;

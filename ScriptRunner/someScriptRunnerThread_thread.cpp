@@ -161,6 +161,20 @@ void ScriptRunnerThread::executeOnTimer(int aTimerCount)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Flush the receive message queue and print an error if it was not empty.
+
+void ScriptRunnerThread::flushRxMsgQueue()
+{
+   int tNumFlush = mRxMsgQueue.flushRead();
+   if (tNumFlush)
+   {
+      Prn::print(0, "mRxMsgQueue.flushRead() NOT EMPTY %d", tNumFlush);
+   }
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 // This is bound to the qcall. It notifies the long thread to abort
 // any running script.
 

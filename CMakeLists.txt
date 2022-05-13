@@ -12,6 +12,7 @@ my_special1()
 
 add_subdirectory ("CommonLib")
 add_subdirectory ("ScriptRunner")
+add_subdirectory ("Responder")
 return()
 
 add_subdirectory ("CommonLib")

@@ -63,12 +63,12 @@ public:
    // Constants:
 
    // Wait timeouts.
-   static const int cRxMsgTimeout = -1;
+   static const int cNoTimeout = -1;
+   static const int cRxMsgTimeout = 1000;
    static const int cScriptThrottle = 100;
 
    // Notification codes.
    static const int cRxMsgNotifyCode = 11;
-
    static const int cFlushRxMsgNotifyCode = 17;
 
    // Loop exit status codes.
@@ -255,6 +255,14 @@ public:
    // Send a message via mSerialMsgThread:
    void sendMsg (RGB::BaseMsg* aTxMsg);
    void sendTestMsg();
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods. Helpers.
+
+   // Flush the receive message queue and print if it was not empty.
+   void flushRxMsgQueue();
 };
 
 //******************************************************************************
