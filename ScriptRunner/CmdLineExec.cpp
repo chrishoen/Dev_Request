@@ -27,6 +27,7 @@ void CmdLineExec::reset()
 void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 {
    if (aCmd->isCmd("SEND"))      executeSend(aCmd);
+   if (aCmd->isCmd("TEST"))      executeTest(aCmd);
    if (aCmd->isCmd("ABORT"))     executeAbort(aCmd);
    if (aCmd->isCmd("GO1"))       executeGo1(aCmd);
    if (aCmd->isCmd("GO2"))       executeGo2(aCmd);
@@ -55,6 +56,15 @@ void CmdLineExec::executeSend (Ris::CmdLineCmd* aCmd)
 
    RGB::TestMsg* tMsg = new RGB::TestMsg;
    Some::gScriptRunnerThread->sendMsg(tMsg);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void CmdLineExec::executeTest(Ris::CmdLineCmd* aCmd)
+{
+   Some::gScriptRunnerThread->mTest1QCall();
 }
 
 //******************************************************************************

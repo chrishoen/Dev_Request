@@ -165,6 +165,7 @@ void ScriptRunnerThread::executeAbort()
 {
    // Abort the long thread.
    BaseClass::mNotify.abort();
+   return;
    // Abort the serial child thread.
    mSerialMsgThread->mSerialMsgPort.doAbort();
 }

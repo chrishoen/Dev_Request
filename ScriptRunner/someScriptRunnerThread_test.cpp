@@ -21,19 +21,18 @@ void ScriptRunnerThread::executeTest1()
 {
    try
    {
-      Prn::print(Prn::View01, "ScriptRunnerThread::executeTest1 BEGIN");
+      Prn::print(Prn::Show1, "ScriptRunnerThread::executeTest1 BEGIN");
 
       // Set the thread notification mask.
       mNotify.setMaskOne("GCodeAck", cGCodeAckNotifyCode);
 
       // Send a message to the responder.
-      RGB::RedRequestMsg* tTxMsg = new RGB::RedRequestMsg;
-      sendMsg(tTxMsg);
+      sendTestMsg();
 
       // Wait for the completion notification.
       mNotify.wait(cGCodeAckTimeout);
 
-      Prn::print(Prn::View01, "ScriptRunnerThread::executeTest1 END");
+      Prn::print(Prn::Show1, "ScriptRunnerThread::executeTest1 END");
    }
    catch (int aException)
    {
