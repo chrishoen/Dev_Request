@@ -1,2 +1,2 @@
-# Dev_Request
-request sequencer test program, c++, vstudio, open folder, cmake
+# Dev_Script
+script runner test programs, c++, vstudio, open folder, cmake
