@@ -12,6 +12,7 @@ my_special1()
 
 add_subdirectory ("CommonLib")
 add_subdirectory ("StringRequester")
+add_subdirectory ("StringResponder")
 return()
 
 add_subdirectory ("CommonLib")

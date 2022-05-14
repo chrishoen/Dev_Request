@@ -4,7 +4,7 @@
 #include "someSerialParms.h"
 #include "rgbMsg.h"
 
-#include "someRequesterThread.h"
+#include "someResponderThread.h"
 #include "someMonitorThread.h"
 
 #include "CmdLineExec.h"
@@ -26,9 +26,9 @@ void CmdLineExec::reset()
 
 void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 {
-   if (aCmd->isCmd("TP"))        Some::gRequesterThread->mTPCode = aCmd->argInt(1);
+   if (aCmd->isCmd("TP"))        Some::gResponderThread->mTPFlag = aCmd->argBool(1);
    if (aCmd->isCmd("SEND"))      executeSend(aCmd);
-   if (aCmd->isCmd("ABORT"))     executeAbort(aCmd);
+   if (aCmd->isCmd("A"))         executeAbort(aCmd);
    if (aCmd->isCmd("GO1"))       executeGo1(aCmd);
    if (aCmd->isCmd("GO2"))       executeGo2(aCmd);
    if (aCmd->isCmd("GO3"))       executeGo3(aCmd);
@@ -42,7 +42,7 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::special(int aSpecial)
 {
-   Some::gRequesterThread->mShowCode = aSpecial;
+   Some::gResponderThread->mShowCode = aSpecial;
    Some::gMonitorThread->mShowCode = aSpecial;
 }
 
@@ -53,7 +53,7 @@ void CmdLineExec::special(int aSpecial)
 void CmdLineExec::executeSend (Ris::CmdLineCmd* aCmd)
 {
    std::string* tString = new std::string("test");
-   Some::gRequesterThread->sendString(tString);
+   Some::gResponderThread->sendString(tString);
 }
 
 //******************************************************************************
@@ -62,7 +62,7 @@ void CmdLineExec::executeSend (Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeAbort (Ris::CmdLineCmd* aCmd)
 {
-   Some::gRequesterThread->mAbortQCall();
+   Some::gResponderThread->mAbortQCall();
 }
 
 //******************************************************************************

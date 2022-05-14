@@ -8,8 +8,8 @@
 
 #include "someSerialParms.h"
 
-#define  _SOMEREQUESTERTHREAD_CPP_
-#include "someRequesterThread.h"
+#define  _SOMERESPONDERTHREAD_CPP_
+#include "someResponderThread.h"
 
 namespace Some
 {
@@ -19,28 +19,28 @@ namespace Some
 //******************************************************************************
 // Constructor.
 
-RequesterThread::RequesterThread()
+ResponderThread::ResponderThread()
 {
    // Set base class variables.
-   BaseClass::setThreadName("Requester");
+   BaseClass::setThreadName("Responder");
    BaseClass::setThreadPriority(Ris::Threads::gPriorities.mProc);
    BaseClass::mTimerPeriod = 100;
 
    // Initialize qcalls.
-   mSessionQCall.bind(this, &RequesterThread::executeSession);
-   mRxStringQCall.bind   (this,&RequesterThread::executeRxString);
-   mAbortQCall.bind(this, &RequesterThread::executeAbort);
+   mSessionQCall.bind(this, &ResponderThread::executeSession);
+   mRxStringQCall.bind   (this,&ResponderThread::executeRxString);
+   mAbortQCall.bind(this, &ResponderThread::executeAbort);
 
    // Initialize member variables.
    mSerialStringThread = 0;
    mConnectionFlag = false;
-   mTPCode = 0;
+   mTPFlag = true;
    mRxCount = 0;
    mTxCount = 0;
    mShowCode = 0;
 }
 
-RequesterThread::~RequesterThread()
+ResponderThread::~ResponderThread()
 {
    if (mSerialStringThread) delete mSerialStringThread;
 }
@@ -50,7 +50,7 @@ RequesterThread::~RequesterThread()
 //******************************************************************************
 // Show thread info for this thread and for child threads.
 
-void RequesterThread::showThreadInfo()
+void ResponderThread::showThreadInfo()
 {
    BaseClass::showThreadInfo();
    if (mSerialStringThread)
@@ -66,9 +66,9 @@ void RequesterThread::showThreadInfo()
 // after the thread starts running. It creates and launches the 
 // child SerialStringThread.
 
-void RequesterThread::threadInitFunction()
+void ResponderThread::threadInitFunction()
 {
-   Trc::write(11, 0, "RequesterThread::threadInitFunction");
+   Trc::write(11, 0, "ResponderThread::threadInitFunction");
 
    // Instance of serial port settings.
    Ris::SerialSettings tSerialSettings;
@@ -88,7 +88,7 @@ void RequesterThread::threadInitFunction()
    // Launch child thread.
    mSerialStringThread->launchThread(); 
 
-   Trc::write(11, 0, "RequesterThread::threadInitFunction done");
+   Trc::write(11, 0, "ResponderThread::threadInitFunction done");
 }
 
 //******************************************************************************
@@ -97,16 +97,16 @@ void RequesterThread::threadInitFunction()
 // Thread exit function. This is called by the base class immedidately
 // before the thread is terminated. It shuts down the child SerialStringThread.
 
-void RequesterThread::threadExitFunction()
+void ResponderThread::threadExitFunction()
 {
-   Trc::write(11, 0, "RequesterThread::threadExitFunction");
-   Prn::print(0, "RequesterThread::threadExitFunction BEGIN");
+   Trc::write(11, 0, "ResponderThread::threadExitFunction");
+   Prn::print(0, "ResponderThread::threadExitFunction BEGIN");
 
    // Shutdown the child thread.
    mSerialStringThread->shutdownThread();
 
-   Prn::print(0, "RequesterThread::threadExitFunction END");
-   Trc::write(11, 0, "RequesterThread::threadExitFunction done");
+   Prn::print(0, "ResponderThread::threadExitFunction END");
+   Trc::write(11, 0, "ResponderThread::threadExitFunction done");
 }
 
 //******************************************************************************
@@ -116,13 +116,13 @@ void RequesterThread::threadExitFunction()
 // function to terminate the thread. This executes in the context of
 // the calling thread.
 
-void RequesterThread::shutdownThread()
+void ResponderThread::shutdownThread()
 {
-   Trc::write(11, 0, "RequesterThread::shutdownThread");
-   Prn::print(0, "RequesterThread::shutdownThread BEGIN");
+   Trc::write(11, 0, "ResponderThread::shutdownThread");
+   Prn::print(0, "ResponderThread::shutdownThread BEGIN");
    BaseClass::shutdownThread();
-   Prn::print(0, "RequesterThread::shutdownThread END");
-   Trc::write(11, 0, "RequesterThread::shutdownThread done");
+   Prn::print(0, "ResponderThread::shutdownThread END");
+   Trc::write(11, 0, "ResponderThread::shutdownThread done");
 }
 
 //******************************************************************************
@@ -130,23 +130,8 @@ void RequesterThread::shutdownThread()
 //******************************************************************************
 // Execute periodically. This is called by the base class timer.
 
-void RequesterThread::executeOnTimer(int aTimerCount)
+void ResponderThread::executeOnTimer(int aTimerCount)
 {
-   if (mTPCode == 1)
-   {
-      std::string* tTxString = new std::string("RED");
-      sendString(tTxString);
-   }
-   else if (mTPCode == 2)
-   {
-      std::string* tTxString = new std::string("GREEN");
-      sendString(tTxString);
-   }
-   else if (mTPCode == 3)
-   {
-      std::string* tTxString = new std::string("BLUE");
-      sendString(tTxString);
-   }
 }
 
 //******************************************************************************
@@ -154,7 +139,7 @@ void RequesterThread::executeOnTimer(int aTimerCount)
 //******************************************************************************
 // Abort function. This is bound to the qcall. It aborts the serial port.
 
-void RequesterThread::executeAbort()
+void ResponderThread::executeAbort()
 {
    mSerialStringThread->mSerialStringPort.doAbort();
 }
@@ -166,15 +151,15 @@ void RequesterThread::executeAbort()
 // when a session is established or disestablished (when the serial port
 // is opened or it is closed because of an error or a disconnection). 
 
-void RequesterThread::executeSession(bool aConnected)
+void ResponderThread::executeSession(bool aConnected)
 {
    if (aConnected)
    {
-      Prn::print(Prn::Show1, "RequesterThread CONNECTED");
+      Prn::print(Prn::Show1, "ResponderThread CONNECTED");
    }
    else
    {
-      Prn::print(Prn::Show1, "RequesterThread DISCONNECTED");
+      Prn::print(Prn::Show1, "ResponderThread DISCONNECTED");
    }
 
    mConnectionFlag = aConnected;
@@ -186,7 +171,7 @@ void RequesterThread::executeSession(bool aConnected)
 // qcall registered to the mSerialStringThread child thread. It is invoked by
 // the child thread when a string is received.
 
-void RequesterThread::executeRxString(std::string* aString)
+void ResponderThread::executeRxString(std::string* aString)
 {
    Prn::print(Prn::Show1, "RequesterThread::executeRxString %s", aString->c_str());
    delete aString;
@@ -197,7 +182,7 @@ void RequesterThread::executeRxString(std::string* aString)
 //******************************************************************************
 // Send a string via the child thread.
 
-void RequesterThread::sendString(std::string* aString)
+void ResponderThread::sendString(std::string* aString)
 {
    mSerialStringThread->sendString(aString);
 }
