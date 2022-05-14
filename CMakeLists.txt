@@ -11,6 +11,10 @@ project ("Dev_Request")
 my_special1() 
 
 add_subdirectory ("CommonLib")
+add_subdirectory ("StringRequester")
+return()
+
+add_subdirectory ("CommonLib")
 add_subdirectory ("MsgScriptRunner")
 add_subdirectory ("MsgRequester")
 add_subdirectory ("MsgResponder")
