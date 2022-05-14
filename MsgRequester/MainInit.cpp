@@ -13,7 +13,7 @@
 
 void main_initialize(int argc,char** argv)
 {
-   printf("ScriptRunner Program**********************************************BEGIN\n");
+   printf("MsgRequester Program**********************************************BEGIN\n");
 
    //***************************************************************************
    //***************************************************************************
@@ -49,7 +49,7 @@ void main_initialize(int argc,char** argv)
    // Initialize trace facility.
 
    Trc::reset();
-   Trc::create_buffer(1,  3, "script");
+   Trc::create_buffer(1,  3, "message");
    Trc::create_buffer(11, 3, "serial");
    Trc::set_default_trace_index(11);
    //Trc::create_log(11, 4, "log/ProtoSerial_trace11.log");
@@ -80,7 +80,7 @@ void main_finalize()
    // Exit process
    Ris::Threads::exitProcess();
 
-   printf("ScriptRunner Program**********************************************BEGIN\n");
+   printf("MsgRequester Program**********************************************BEGIN\n");
 }
 
 //******************************************************************************

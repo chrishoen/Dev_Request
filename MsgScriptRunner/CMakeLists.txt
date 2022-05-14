@@ -4,7 +4,7 @@ if (NOT MSVC)
    return()
 endif()
 
-set (project "Requester")
+set (project "MsgScriptRunner")
 project(${project} CXX)
 my_find_src_files (src_files ${project})
 add_executable (${project} ${src_files})

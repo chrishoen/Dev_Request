@@ -1,10 +1,10 @@
 ﻿cmake_minimum_required(VERSION 3.10)
 
-if (NOT MSVC)
+if (MSVC)
    return()
 endif()
 
-set (project "ScriptRunner")
+set (project "MsgResponder")
 project(${project} CXX)
 my_find_src_files (src_files ${project})
 add_executable (${project} ${src_files})
@@ -16,6 +16,12 @@ my_inc_import_CommonLib(${project})
 my_lib_import_CommonLib(${project})
 my_lib_import_RisLib(${project})
 
+
+if (MYMODE STREQUAL "steno-arm")
+   install(CODE "execute_process(COMMAND_ECHO STDOUT
+      COMMAND scp ${CMAKE_CURRENT_BINARY_DIR}/${project} root@stenotgt:/home/root/stenograph/bin)")
+endif()
+return()
 
 if (MSVC)
    install(TARGETS ${project} DESTINATION "C:/aaa_prime/RisLib")

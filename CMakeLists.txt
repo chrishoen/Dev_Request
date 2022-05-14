@@ -11,13 +11,14 @@ project ("Dev_Request")
 my_special1() 
 
 add_subdirectory ("CommonLib")
-add_subdirectory ("ScriptRunner")
-add_subdirectory ("Responder")
+add_subdirectory ("MsgScriptRunner")
+add_subdirectory ("MsgRequester")
+add_subdirectory ("MsgResponder")
 return()
 
 add_subdirectory ("CommonLib")
-add_subdirectory ("Requester")
-add_subdirectory ("Responder")
+add_subdirectory ("MsgRequester")
+add_subdirectory ("MsgResponder")
 return()
 
 add_subdirectory ("Test")
