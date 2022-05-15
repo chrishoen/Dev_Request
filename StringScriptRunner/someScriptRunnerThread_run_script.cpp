@@ -157,7 +157,7 @@ void ScriptRunnerThread::executeGreen(Ris::CmdLineCmd* aCmd)
    flushRxStringQueue();
 
    // Send a string to the responder.
-   std::string* tTxString = new std::string("red");
+   std::string* tTxString = new std::string("green");
    sendString(tTxString);
 
    // Wait for the response string notification.
@@ -188,7 +188,7 @@ void ScriptRunnerThread::executeBlue(Ris::CmdLineCmd* aCmd)
    flushRxStringQueue();
 
    // Send a string to the responder.
-   std::string* tTxString = new std::string("red");
+   std::string* tTxString = new std::string("blue");
    sendString(tTxString);
 
    // Wait for the response string notification.
