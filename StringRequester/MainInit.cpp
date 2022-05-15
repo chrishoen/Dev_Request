@@ -54,6 +54,8 @@ void main_initialize(int argc,char** argv)
    Trc::set_default_trace_index(11);
    //Trc::create_log(11, 4, "log/ProtoSerial_trace11.log");
    Trc::initialize();
+   Trc::start(1);
+   Trc::start(11);
 
    //***************************************************************************
    //***************************************************************************

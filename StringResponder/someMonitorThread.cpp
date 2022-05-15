@@ -59,19 +59,19 @@ void MonitorThread::executeOnTimer(int aTimeCount)
    update();
 
    // Show.
-   if (mShowCode == 2)
+   if (mShowCode == 1)
    {
-      Prn::print(Prn::Show2, "TxStringCount               %-10d  %d",
+      Prn::print(Prn::Show1, "TxStringCount               %-10d  %d",
          mMon_TxStringCount.mValue, mMon_TxStringCount.mDelta);
-      Prn::print(Prn::Show2, "TxByteCount                 %-10lld  %lld",
+      Prn::print(Prn::Show1, "TxByteCount                 %-10lld  %lld",
          mMon_TxByteCount.mValue, mMon_TxByteCount.mDelta);
 
-      Prn::print(Prn::Show2, "RxStringCount               %-10d  %d",
+      Prn::print(Prn::Show1, "RxStringCount               %-10d  %d",
          mMon_RxStringCount.mValue, mMon_RxStringCount.mDelta);
-      Prn::print(Prn::Show2, "RxByteCount                 %-10lld  %lld",
+      Prn::print(Prn::Show1, "RxByteCount                 %-10lld  %lld",
          mMon_RxByteCount.mValue, mMon_RxByteCount.mDelta);
 
-      Prn::print(Prn::Show2, "");
+      Prn::print(Prn::Show1, "");
    }
 }
 
