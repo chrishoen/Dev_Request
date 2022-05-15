@@ -10,7 +10,7 @@ my_inc_import_RisLib(${project})
 my_lib_import_RisLib(${project})
 
 if (MSVC)
-   install(TARGETS ${project} DESTINATION "C:/aaa_prime/VarCom")
+   install(TARGETS ${project} DESTINATION "C:/aaa_prime/RisLib")
 elseif (MYMODE STREQUAL cpdev1 OR MYMODE STREQUAL wsl) 
    install(TARGETS ${project} DESTINATION "/opt/prime/bin")
 elseif (MYMODE STREQUAL "beagle")

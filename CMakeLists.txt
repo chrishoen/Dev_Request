@@ -10,6 +10,9 @@ include(MySpecial.cmake)
 project ("Dev_Request")
 my_special1() 
 
+add_subdirectory ("Test")
+return()
+
 add_subdirectory ("CommonLib")
 add_subdirectory ("StringScriptRunner")
 add_subdirectory ("StringResponder")
@@ -28,9 +31,6 @@ return()
 add_subdirectory ("CommonLib")
 add_subdirectory ("MsgRequester")
 add_subdirectory ("MsgResponder")
-return()
-
-add_subdirectory ("Test")
 return()
 
 
