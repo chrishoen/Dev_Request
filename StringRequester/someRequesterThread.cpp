@@ -188,7 +188,8 @@ void RequesterThread::executeSession(bool aConnected)
 
 void RequesterThread::executeRxString(std::string* aString)
 {
-   Prn::print(Prn::Show1, "RequesterThread::executeRxString %s", aString->c_str());
+   Prn::print(Prn::Show4, "RequesterThread::executeRxString %s", aString->c_str());
+   Trc::write(1, 0, "RequesterThread::executeRxString %s", aString->c_str());
    delete aString;
 }
 

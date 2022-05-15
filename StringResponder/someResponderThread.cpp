@@ -168,13 +168,69 @@ void ResponderThread::executeSession(bool aConnected)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// qcall registered to the mSerialStringThread child thread. It is invoked by
-// the child thread when a string is received.
+// This is bound to the qcall. Convert the received string into a
+// command line command and call the following execute command line
+// command function.
 
 void ResponderThread::executeRxString(std::string* aString)
 {
-   Prn::print(Prn::Show1, "RequesterThread::executeRxString %s", aString->c_str());
+   Prn::print(Prn::Show4, "ResponderThread::executeRxString %s", aString->c_str());
+   Trc::write(1, 0, "ResponderThread::executeRxString %s", aString->c_str());
+
+   // Parse the received string into the command line command.
+   mCmd.parseCmdLine(aString->c_str());
+
+   // Execute the command line command.
+   execute(&mCmd);
+
+   // Done.
    delete aString;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Execute a command line command derived from the received string.
+// Call one of the following specific command execution functions.
+
+void ResponderThread::execute(Ris::CmdLineCmd* aCmd)
+{
+   if (aCmd->isCmd("RED"))    executeRed(aCmd);
+   if (aCmd->isCmd("GREEN"))  executeGreen(aCmd);
+   if (aCmd->isCmd("BLUE"))   executeBlue(aCmd);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void ResponderThread::executeRed(Ris::CmdLineCmd* aCmd)
+{
+   Trc::write(1, 0, "executeRed");
+   sendString(new std::string("red ack"));
+   Trc::write(1, 0, "executeRed done");
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void ResponderThread::executeGreen(Ris::CmdLineCmd* aCmd)
+{
+   Trc::write(1, 0, "executeGreen");
+   sendString(new std::string("red ack"));
+   Trc::write(1, 0, "executeGreen done");
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void ResponderThread::executeBlue(Ris::CmdLineCmd* aCmd)
+{
+   Trc::write(1, 0, "executeBlue");
+   sendString(new std::string("red ack"));
+   Trc::write(1, 0, "executeBlue done");
 }
 
 //******************************************************************************

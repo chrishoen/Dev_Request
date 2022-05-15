@@ -10,6 +10,7 @@ Serial string prototype thread class.
 
 #include "risThreadsQCallThread.h"
 #include "risSerialStringThread.h"
+#include "risCmdLineCmd.h"
 
 //******************************************************************************
 //******************************************************************************
@@ -60,6 +61,14 @@ public:
    // Serial string thread, this manages serial string connections and
    // string transmission and reception.
    Ris::SerialStringThread*  mSerialStringThread;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Members.
+
+   // Command line command for script reader.
+   Ris::CmdLineCmd mCmd;
 
    //***************************************************************************
    //***************************************************************************
@@ -126,9 +135,19 @@ public:
    // the child thread when a string is received.
    Ris::SerialStringThread::RxStringQCall mRxStringQCall;
 
-   // Based on the receive string type, call one of the specific receive
-   // string handlers. This is bound to the qcall.
+   // This is bound to the qcall. Convert the received string into a
+   // command line command and call the following execute command line
+   // command function.
    void executeRxString(std::string* aString);
+
+   // Execute a command line command derived from the received string.
+   // Call one of the following specific command execution functions.
+   void execute(Ris::CmdLineCmd* aCmd);
+
+   // Execute specific commands.
+   void executeRed(Ris::CmdLineCmd* aCmd);
+   void executeGreen(Ris::CmdLineCmd* aCmd);
+   void executeBlue(Ris::CmdLineCmd* aCmd);
 
    //***************************************************************************
    //***************************************************************************
