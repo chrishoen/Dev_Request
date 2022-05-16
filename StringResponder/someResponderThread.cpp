@@ -218,7 +218,8 @@ void ResponderThread::executeRed(Ris::CmdLineCmd* aCmd)
 void ResponderThread::executeGreen(Ris::CmdLineCmd* aCmd)
 {
    Trc::write(1, 0, "executeGreen");
-   sendString(new std::string("green ack"));
+   sendString(new std::string("green ack 1"));
+   sendString(new std::string("green ack 2"));
    Trc::write(1, 0, "executeGreen done");
 }
 
@@ -229,7 +230,9 @@ void ResponderThread::executeGreen(Ris::CmdLineCmd* aCmd)
 void ResponderThread::executeBlue(Ris::CmdLineCmd* aCmd)
 {
    Trc::write(1, 0, "executeBlue");
-   sendString(new std::string("blue ack"));
+   sendString(new std::string("blue ack 1"));
+   sendString(new std::string("blue ack 2"));
+   sendString(new std::string("blue ack 3"));
    Trc::write(1, 0, "executeBlue done");
 }
 

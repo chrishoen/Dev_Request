@@ -62,7 +62,7 @@ public:
    // Constants:
 
    // Wait timeouts.
-   static const int cNoTimeout = -1;
+   static const int cInfiniteTimeout = -1;
    static const int cRxStringTimeout = 1000;
    static const int cScriptThrottle = 100;
 

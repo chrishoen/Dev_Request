@@ -32,7 +32,7 @@ void ScriptRunnerThread::executeTest1()
       sendString(tTxString);
 
       // Wait for the response string notification.
-      mNotify.wait(cNoTimeout);
+      mNotify.wait(cInfiniteTimeout);
 
       // Read the receive string from the string queue and process it.
       std::string* tRxString = mRxStringQueue.tryRead();
